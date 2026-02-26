@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.codeleg.dailyscope.HomeFragment"
+        android:name="com.codeleg.dailyscope.ui.fragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
-        android:name="com.codeleg.dailyscope.ArticleFragment"
+        android:name="com.codeleg.dailyscope.ui.fragment.ArticleFragment"
         android:label="fragment_article"
         tools:layout="@layout/fragment_article" >
         <action

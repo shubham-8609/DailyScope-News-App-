@@ -85,6 +85,7 @@ dependencies {
     implementation("androidx.room:room-paging:2.6.1")
 
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation( "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
 
     /* -------------------- Testing -------------------- */
     testImplementation(libs.junit)
