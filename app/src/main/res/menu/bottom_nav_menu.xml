@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/filled_category_24"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/categoriesFragment"
+        android:icon="@drawable/rounded_category_24"
+        android:title="Categories" />
+
+    <item
+        android:id="@+id/bookmarkFragment"
+        android:icon="@drawable/outline_bookmark_24"
+        android:title="Bookmarks" />
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/filled_bookmark_24"
+        android:title="Settings" />
+
+</menu>
