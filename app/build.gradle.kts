@@ -47,11 +47,13 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.activity)
     implementation(libs.material)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     /* -------------------- Lifecycle (MVVM) -------------------- */
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v280)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     /* -------------------- Coroutines -------------------- */
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
