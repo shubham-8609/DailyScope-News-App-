@@ -1,22 +1,26 @@
 package com.codeleg.dailyscope.database.network
 
-import com.codeleg.dailyscope.database.model.NewsResponse
+import com.codeleg.dailyscope.database.model.TopNewsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsApiService {
 
-    @GET("latest")
-    suspend fun getLatestNews(): Response<NewsResponse>
+    @GET("top-news")
+    suspend fun getLatestNews(
+        @Query("source-country") country: String,
+        @Query("language")language: String?,
+        @Query("headlines-only")headlinesOnly: Boolean = false
+    ): TopNewsResponse
 
-    @GET("local")
+    /*@GET("local")
     suspend fun getLocalNews(): Response<NewsResponse>
 
-     @GET("technologies")
+    @GET("technologies")
     suspend fun getTechnologyNews(): Response<NewsResponse>
 
-     @GET("sports")
+    @GET("sports")
     suspend fun getSportsNews(): Response<NewsResponse>
 
     @GET("news")
@@ -31,7 +35,6 @@ interface NewsApiService {
 
     @GET("agriculture")
     suspend fun getAgricultureNews(): Response<NewsResponse>
-
-
+*/
 
 }

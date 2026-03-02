@@ -2,39 +2,39 @@ package com.codeleg.dailyscope.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codeleg.dailyscope.database.model.NewsResponse
+import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.database.model.NewsUiState
 import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlin.collections.emptyList
 
 class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
-    private val _latestNews = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
-    val latestNews: StateFlow<NewsUiState> = _latestNews
+    private val _topNews = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
+    val topNews: StateFlow<NewsUiState> = _topNews
 
 
     fun fetchNews() {
         viewModelScope.launch {
-            _latestNews.value = NewsUiState.Loading
+            _topNews.value = NewsUiState.Loading
             try {
-
-                when(val resul = newsRepo.getLatestNews()) {
+                when(val result = newsRepo.getTopNews("in" , "en", false)) {
                     is Resource.Success -> {
-                        val news = resul.data?.news ?: emptyList()
-                        _latestNews.value = NewsUiState.Success(news)
+                        val articles: List<Article> =
+                            result.data?.top_news
+                                ?.flatMap { it.news }
+                                ?: emptyList()
+                        _topNews.value = NewsUiState.Success(articles)
                     }
                     is Resource.Error -> {
-                        _latestNews.value = NewsUiState.Error(resul.message ?: "Unknown error altering at viewmodel")
+                        _topNews.value = NewsUiState.Error(result.message ?: "Unknown error  at viewmodel")
                     }
-
                     else -> {}
                 }
-
-
             } catch (e: Exception) {
-                _latestNews.value =
+                _topNews.value =
                     NewsUiState.Error("Failed to fetch news: ${e.message ?: "Unknown error"}")
             }
         }
