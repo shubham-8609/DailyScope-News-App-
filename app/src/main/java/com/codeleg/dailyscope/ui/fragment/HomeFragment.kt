@@ -26,7 +26,10 @@ class HomeFragment : Fragment() {
 
     private lateinit var newsAdapter: NewsListAdapter
     private val newsRepo by lazy {
-        NewsRepository(RetrofitInstance.newsApi , (requireActivity().application as DailyScope).newsDao)
+        NewsRepository(
+            RetrofitInstance.newsApi,
+            (requireActivity().application as DailyScope).newsDao
+        )
     }
     val mainVM: MainViewModel by activityViewModels {
         MainViewModelFactory(newsRepo)
@@ -54,14 +57,18 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainVM.news.collect { articles ->
                     newsAdapter.submitList(articles)
-                    }
                 }
+            }
         }
-//       if(mainVM.topNews.value is NewsUiState.Loading) mainVM.fetchNews()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainVM.isRefreshing.collect { isRefreshing ->
+                    binding.swipeRefresh.isRefreshing = isRefreshing
+                }
+            }
+        }
 
-        binding.swipeRefresh.setOnRefreshListener {
-            mainVM.refreshNews()
-        }
+        binding.swipeRefresh.setOnRefreshListener { mainVM.refreshNews() }
 
     }
 

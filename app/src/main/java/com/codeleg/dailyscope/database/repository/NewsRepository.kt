@@ -25,8 +25,8 @@ class NewsRepository(
         country: String = "in",
         language: String = "en",
         headlinesOnly: Boolean
-    )  {
-        try {
+    ): Boolean  {
+        return try {
             val response = newsApi.getLatestNews(
                 country = country,
                 language = language,
@@ -43,9 +43,10 @@ class NewsRepository(
             newsDao.insertArticles(
                 articles.map { it.toEntity() }
             )
-
+            true
         } catch (e: Exception) {
             Log.e("codeleg", "Error refreshing news: ${e.localizedMessage}", e)
+            false
         }
     }
 

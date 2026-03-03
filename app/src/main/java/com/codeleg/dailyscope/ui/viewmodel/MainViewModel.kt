@@ -17,9 +17,13 @@ import kotlin.collections.emptyList
 class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
 
     val news = newsRepo.getNewsFromDb()
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
     fun refreshNews(){
         viewModelScope.launch {
+            _isRefreshing.value = true
             newsRepo.refreshNews("in", "en", false)
+            _isRefreshing.value = false
         }
     }
 
