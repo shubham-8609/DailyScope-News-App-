@@ -13,14 +13,26 @@
         <action
             android:id="@+id/action_homeFragment_to_articleFragment"
             app:destination="@id/articleFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_bookmarkFragment2"
+            app:destination="@id/bookmarkFragment" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.codeleg.dailyscope.ui.fragment.ArticleFragment"
         android:label="fragment_article"
-        tools:layout="@layout/fragment_article" >
-        <action
-            android:id="@+id/action_articleFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_article" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.codeleg.dailyscope.ui.fragment.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.codeleg.dailyscope.ui.fragment.BookmarkFragment"
+        android:label="fragment_bookmark"
+        tools:layout="@layout/fragment_bookmark" />
 </navigation>
