@@ -1,5 +1,6 @@
 package com.codeleg.dailyscope.ui.fragment
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.codeleg.dailyscope.DailyScope
+import com.codeleg.dailyscope.database.local.NewsDB
 import com.codeleg.dailyscope.database.model.NewsUiState
 import com.codeleg.dailyscope.database.network.RetrofitInstance
 import com.codeleg.dailyscope.database.repository.NewsRepository
@@ -23,7 +26,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var newsAdapter: NewsListAdapter
     private val newsRepo by lazy {
-        NewsRepository(RetrofitInstance.newsApi)
+        NewsRepository(RetrofitInstance.newsApi , (requireActivity().application as DailyScope).newsDao)
     }
     val mainVM: MainViewModel by activityViewModels {
         MainViewModelFactory(newsRepo)
@@ -49,37 +52,15 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainVM.topNews.collect { state ->
-                    when (state) {
-
-                        is NewsUiState.Loading -> {
-                            Toast.makeText(requireContext(), "Loading news...", Toast.LENGTH_SHORT)
-                                .show()
-                            binding.swipeRefresh.isRefreshing = true
-                        }
-
-                        is NewsUiState.Success -> {
-                            newsAdapter.submitList(state.news)
-                            binding.swipeRefresh.isRefreshing  = false
-                        }
-
-                        is NewsUiState.Error -> {
-                            binding.rvNews.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                "Error fetching news: ${state.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            binding.swipeRefresh.isRefreshing = false
-                        }
+                mainVM.news.collect { articles ->
+                    newsAdapter.submitList(articles)
                     }
                 }
-            }
         }
-       if(mainVM.topNews.value is NewsUiState.Loading) mainVM.fetchNews()
+//       if(mainVM.topNews.value is NewsUiState.Loading) mainVM.fetchNews()
 
         binding.swipeRefresh.setOnRefreshListener {
-            mainVM.fetchNews()
+            mainVM.refreshNews()
         }
 
     }

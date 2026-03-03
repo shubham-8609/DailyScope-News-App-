@@ -27,10 +27,6 @@ import kotlinx.coroutines.time.delay
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val newsRepo = NewsRepository(RetrofitInstance.newsApi)
-    private val mainVM: MainViewModel by viewModels {
-        MainViewModelFactory(newsRepo)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

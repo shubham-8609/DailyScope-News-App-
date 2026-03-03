@@ -52,7 +52,6 @@ dependencies {
 
     /* -------------------- Lifecycle (MVVM) -------------------- */
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx.v280)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     /* -------------------- Coroutines -------------------- */
@@ -78,9 +77,9 @@ dependencies {
     implementation("com.intuit.ssp:ssp-android:1.1.1")
 
     /* -------------------- Room -------------------- */
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.4")
+    implementation("androidx.room:room-ktx:2.8.4")
+    kapt("androidx.room:room-compiler:2.8.4")
 
     /* -------------------- Paging 3 -------------------- */
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
