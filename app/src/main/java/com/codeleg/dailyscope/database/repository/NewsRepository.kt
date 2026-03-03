@@ -1,28 +1,56 @@
 package com.codeleg.dailyscope.database.repository
 
-import com.codeleg.dailyscope.database.model.TopNewsResponse
+import android.util.Log
+import com.codeleg.dailyscope.database.local.NewsDao
+import com.codeleg.dailyscope.database.local.toArticle
+import com.codeleg.dailyscope.database.local.toEntity
+import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.database.network.NewsApiService
-import com.codeleg.dailyscope.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class NewsRepository(
-    private val newsApi: NewsApiService
+    private val newsApi: NewsApiService,
+    private val newsDao: NewsDao
 ) {
-    suspend fun getTopNews(
+
+
+    fun getNewsFromDb(): Flow<List<Article>>  {
+        return newsDao.getAllArticles().map { entityList ->
+                entityList.map { it.toArticle() }
+        }
+    }
+
+    suspend fun refreshNews(
         country: String = "in",
         language: String = "en",
         headlinesOnly: Boolean
-    ): Resource<TopNewsResponse> {
-        return try {
+    )  {
+        try {
             val response = newsApi.getLatestNews(
                 country = country,
                 language = language,
                 headlinesOnly = headlinesOnly
             )
-            Resource.Success(response)
+
+            val articles = response.top_news.flatMap { it.news }
+            Log.d("codeleg", "Fetched ${articles.size} articles from API --newsRepo")
+
+            if (articles.isEmpty()) Log.d("codeleg", "No articles fetched from API  --newsRepo")
+
+
+            // Map DTO -> Entity
+            newsDao.insertArticles(
+                articles.map { it.toEntity() }
+            )
+
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "Failed to get error--Found at repo layer")
+            Log.e("codeleg", "Error refreshing news: ${e.localizedMessage}", e)
         }
     }
+
+    suspend fun clearDB()  = newsDao.deleteAllArticles()
+
 
     /*suspend fun getLocalNews(): Resource<NewsResponse> {
         return try {
