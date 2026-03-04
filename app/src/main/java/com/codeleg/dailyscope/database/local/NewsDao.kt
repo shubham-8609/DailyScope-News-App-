@@ -1,5 +1,6 @@
 package com.codeleg.dailyscope.database.local
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -21,6 +22,9 @@ interface NewsDao {
 
     @Query("UPDATE articles SET isBookmarked = :state WHERE url = :url")
     suspend fun updateBookmark(url: String, state: Boolean)
+
+    @Query("SELECT * FROM articles ORDER BY publishDate DESC")
+    fun getPagedArticles(): PagingSource<Int , ArticleEntity>
 
     @Query("SELECT * FROM articles WHERE isBookmarked = 1")
     fun getBookmarkedArticles(): Flow<List<ArticleEntity>>

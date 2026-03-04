@@ -2,8 +2,8 @@ package com.codeleg.dailyscope.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.codeleg.dailyscope.R
@@ -12,7 +12,7 @@ import com.codeleg.dailyscope.databinding.ItemArticleBinding
 
 
 class NewsListAdapter :
-    ListAdapter<Article, NewsListAdapter.NewsViewHolder>(DiffCallback) {
+    PagingDataAdapter<Article, NewsListAdapter.NewsViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -36,22 +36,24 @@ class NewsListAdapter :
         private val binding: ItemArticleBinding
     ) : ViewHolder(binding.root) {
 
-        fun bind(article: Article) {
+        fun bind(article: Article?) {
             with(binding) {
-                newsTitle.text = article.title
-                newsSummary.text = article.summary ?: (article.text.take(100) + "...")
-                categoryChip.text = article.category ?: "Unknown"
-                val metaData = "By ${article.authors?.joinToString(", ") ?: "Unknown"} | " +
-                        "${article.publishDate.take(10)} | " +
-                        "Sentiment: ${article.sentiment ?: "N/A"}"
-                newsMeta.text = metaData
-                Glide.with(newsImage.context)
-                    .load(article.image)
-                    .centerCrop()
-                    .placeholder(R.drawable.news_placeholder)
-                    .error(R.drawable.error_image)
-                    .into(newsImage)
+                article?.let {
+                    newsTitle.text = article.title
+                    newsSummary.text = article.summary ?: (article.text.take(100) + "...")
+                    categoryChip.text = article.category ?: "Unknown"
+                    val metaData = "By ${article.authors?.joinToString(", ") ?: "Unknown"} | " +
+                            "${article.publishDate.take(10)} | " +
+                            "Sentiment: ${article.sentiment ?: "N/A"}"
+                    newsMeta.text = metaData
+                    Glide.with(newsImage.context)
+                        .load(article.image)
+                        .centerCrop()
+                        .placeholder(R.drawable.news_placeholder)
+                        .error(R.drawable.error_image)
+                        .into(newsImage)
 
+                }
             }
         }
     }

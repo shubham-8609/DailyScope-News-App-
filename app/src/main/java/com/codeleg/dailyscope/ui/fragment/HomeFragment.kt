@@ -20,6 +20,7 @@ import com.codeleg.dailyscope.databinding.FragmentHomeBinding
 import com.codeleg.dailyscope.ui.adapter.NewsListAdapter
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -55,8 +56,8 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainVM.news.collect { articles ->
-                    newsAdapter.submitList(articles)
+                mainVM.news.collectLatest { pagingData ->
+                    newsAdapter.submitData(pagingData)
                 }
             }
         }

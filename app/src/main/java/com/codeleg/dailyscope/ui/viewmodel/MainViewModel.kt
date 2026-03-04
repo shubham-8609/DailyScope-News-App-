@@ -3,6 +3,7 @@ package com.codeleg.dailyscope.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.codeleg.dailyscope.database.local.ArticleEntity
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.database.model.NewsUiState
@@ -15,8 +16,7 @@ import kotlinx.coroutines.launch
 import kotlin.collections.emptyList
 
 class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
-
-    val news = newsRepo.getNewsFromDb()
+    val news = newsRepo.getPagedNewsFromDb().cachedIn(viewModelScope)
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
     fun refreshNews(){
