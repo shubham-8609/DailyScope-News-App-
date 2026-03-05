@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
     private val newsRepo by lazy {
         NewsRepository(RetrofitInstance.newsApi, (requireActivity().application as DailyScope).newsDao)
     }
-    val mainVM: MainViewModel by activityViewModels { MainViewModelFactory(newsRepo) }
+    private val mainVM: MainViewModel by activityViewModels { MainViewModelFactory(newsRepo) }
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
                     }
                     R.id.option_filter_news -> {
                         // Handle filter news action
-
+                        FilterFragment().show(parentFragmentManager , "FilterFragment")
                         true
                     }
                     else -> false
@@ -94,7 +94,6 @@ class HomeFragment : Fragment() {
 
 
         } , viewLifecycleOwner, Lifecycle.State.RESUMED)
-        mainVM.printCategories()
     }
 
     private fun setupRecyclerView() {
