@@ -1,29 +1,16 @@
 package com.codeleg.dailyscope.ui.activity
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.codeleg.dailyscope.R
-import com.codeleg.dailyscope.database.network.RetrofitInstance
-import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.databinding.ActivityMainBinding
-import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
-import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.time.delay
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -66,8 +53,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun manageToolbar() {
-        lifecycleScope.launch {
             setSupportActionBar(binding.toolbar)
-        }
     }
 }

@@ -7,6 +7,7 @@
 
     <!-- Top App Bar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -14,10 +15,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/black_gradient_overlay"
             app:title="DailyScope"
             app:subtitle="@string/app_theme"
-            app:menu="@menu/home_menu" />
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
