@@ -50,7 +50,7 @@ class NewsListAdapter :
                         .load(article.image)
                         .centerCrop()
                         .placeholder(R.drawable.news_placeholder)
-                        .error(R.drawable.error_image)
+                        .error(R.drawable.image_unavailable)
                         .into(newsImage)
 
                 }
