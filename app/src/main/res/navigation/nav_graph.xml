@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_bookmarkFragment2"
             app:destination="@id/bookmarkFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
@@ -35,4 +38,8 @@
         android:name="com.codeleg.dailyscope.ui.fragment.BookmarkFragment"
         android:label="fragment_bookmark"
         tools:layout="@layout/fragment_bookmark" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.codeleg.dailyscope.ui.fragment.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>
