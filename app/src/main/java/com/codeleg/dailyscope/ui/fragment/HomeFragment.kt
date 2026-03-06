@@ -59,6 +59,13 @@ class HomeFragment : Fragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                mainVM.filteredNews.collectLatest { pagingData ->
+                    newsAdapter.submitData(pagingData)
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainVM.isRefreshing.collect { isRefreshing ->
                     binding.swipeRefresh.isRefreshing = isRefreshing
@@ -80,7 +87,6 @@ class HomeFragment : Fragment() {
                 return when(menuItem.itemId){
                     R.id.option_refresh -> {
                         mainVM.refreshNews()
-                        Log.d("codeleg", "Refresh menu item clicked --homeFragment")
                         true
                     }
                     R.id.option_filter_news -> {

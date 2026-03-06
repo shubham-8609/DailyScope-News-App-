@@ -127,6 +127,7 @@ class FilterFragment : BottomSheetDialogFragment() {
             val filterState = FilterState(date = selectedDate?.time, category = selectedCategory, sentimentMin = sentimentMin, sentimentMax = sentimentMax)
             mainVM.applyFilters(filterState)
             Toast.makeText(requireContext() , "Filters applied", Toast.LENGTH_SHORT).show()
+            Log.d("codeleg" , "Applied filters: $filterState --filterFragment")
             dismiss()
 
         }
