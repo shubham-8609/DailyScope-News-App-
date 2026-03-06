@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.homeFragment,
                 R.id.categoryFragment,
-                R.id.bookmarkFragment
+                R.id.bookmarkFragment,
+                R.id.settingsFragment
             )
         )
         if (navControler != null) {
@@ -41,10 +42,26 @@ class MainActivity : AppCompatActivity() {
         } else Toast.makeText(this, "Navigation controller not found", Toast.LENGTH_SHORT).show()
         navControler?.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> binding.toolbar.title = "Home"
-                R.id.categoryFragment -> binding.toolbar.title = "Category"
-                R.id.bookmarkFragment -> binding.toolbar.title = "Bookmark"
-                R.id.articleFragment -> binding.toolbar.title = "Article"
+                R.id.homeFragment -> {
+                    binding.toolbar.title = "Home"
+                    binding.toolbar.subtitle = "Latest news and updates"
+                }
+                R.id.categoryFragment -> {
+                    binding.toolbar.title = "Category"
+                    binding.toolbar.subtitle = "Select a category"
+                }
+                R.id.bookmarkFragment ->  {
+                    binding.toolbar.title = "Bookmark"
+                    binding.toolbar.subtitle = "Your saved articles"
+                }
+                R.id.articleFragment -> {
+                    binding.toolbar.title = "Article"
+                    binding.toolbar.subtitle = "Read the full article"
+                }
+                R.id.settingsFragment ->  {
+                    binding.toolbar.title = "Settings"
+                    binding.toolbar.subtitle = "Customize your experience"
+                }
             }
         }
 

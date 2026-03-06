@@ -10,6 +10,7 @@ import com.codeleg.dailyscope.database.local.toArticle
 import com.codeleg.dailyscope.database.local.toEntity
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.database.network.NewsApiService
+import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -21,11 +22,7 @@ class NewsRepository(
 ) {
 
 
-    fun getNewsFromDb(): Flow<List<Article>>  {
-        return newsDao.getAllArticles().map { entityList ->
-                entityList.map { it.toArticle() }
-        }
-    }
+
 
     fun getPagedNewsFromDb(): Flow<PagingData<Article>>{
 
@@ -69,72 +66,26 @@ class NewsRepository(
         }
     }
 
+    suspend fun getCategoriesFromDb(): List<String?> = newsDao.getCategories()
+
+    fun getFilteredNews(filter: FilterState): Flow<PagingData<Article>> {
+        return Pager(
+            config = PagingConfig(pageSize = 15, enablePlaceholders = false),
+            pagingSourceFactory = {
+                newsDao.getFilteredNews(
+                    category = filter.category,
+                    date = filter.date,
+                    sentimentMin = filter.sentimentMin,
+                    sentimentMax = filter.sentimentMax
+                )
+            }
+        ).flow.map { pagingData ->
+            pagingData.map { it.toArticle() }
+        }
+    }
+
     suspend fun clearDB()  = newsDao.deleteAllArticles()
 
 
-    /*suspend fun getLocalNews(): Resource<NewsResponse> {
-        return try {
-            val response = newsApi.getLocalNews()
-            if (response.isSuccessful && response.body() != null) {
-                Resource.Success(response.body()!!)
-            } else {
-                Resource.Error("Something went wrong. Response isn't successful or body is null.")
-            }
-        } catch (e: Exception) {
-            Resource.Error(e.message ?: "Failed to get error")
-        }
-    }
-
-    suspend fun getTechnologyNews(): Resource<NewsResponse> {
-        return try {
-            val response = newsApi.getTechnologyNews()
-            if (response.isSuccessful && response.body() != null) {
-                Resource.Success(response.body()!!)
-            } else {
-                Resource.Error("Something went wrong. Response isn't successful or body is null.")
-            }
-        } catch (e: Exception) {
-            Resource.Error(e.message ?: "Failed to get error")
-        }
-    }
-
-    suspend fun getSportsNews(): Resource<NewsResponse> {
-        return try {
-            val response = newsApi.getSportsNews()
-            if (response.isSuccessful && response.body() != null) {
-                Resource.Success(response.body()!!)
-            } else {
-                Resource.Error("Something went wrong. Response isn't successful or body is null.")
-            }
-        } catch (e: Exception) {
-            Resource.Error(e.message ?: "Failed to get error")
-        }
-    }
-
-    suspend fun getBusinessNews(): Resource<NewsResponse> {
-        return try {
-            val response = newsApi.getBusinessNews()
-            if (response.isSuccessful && response.body() != null) {
-                Resource.Success(response.body()!!)
-            } else {
-                Resource.Error("Something went wrong. Response isn't successful or body is null.")
-            }
-        } catch (e: Exception) {
-            Resource.Error(e.message ?: "Failed to get error")
-        }
-    }
-
-    suspend fun getAgricultureNews(): Resource<NewsResponse> {
-        return try {
-            val response = newsApi.getAgricultureNews()
-            if (response.isSuccessful && response.body() != null) {
-                Resource.Success(response.body()!!)
-            } else {
-                Resource.Error("Something went wrong. Response isn't successful or body is null.")
-            }
-        } catch (e: Exception) {
-            Resource.Error(e.message ?: "Failed to get error")
-        }
-    }*/
 
 }

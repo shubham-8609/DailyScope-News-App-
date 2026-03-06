@@ -1,6 +1,7 @@
 package com.codeleg.dailyscope.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.databinding.FragmentFilterBinding
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import com.codeleg.dailyscope.utils.FilterState
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.CalendarConstraints
@@ -90,21 +92,18 @@ class FilterFragment : BottomSheetDialogFragment() {
 
             }
         }
-        binding.sentimentSlider.setValues(-0.5f, 0.5f)
+        binding.sentimentSlider.setValues(-1f, 1f)
         binding.etDate.setOnClickListener {
             datePicker.show(parentFragmentManager, "datePicker")
         }
         binding.btnApply.setOnClickListener {
-
             val selectedDateText = binding.etDate.text.toString()
-
             if (selectedDateText.isEmpty()) {
                 Toast.makeText(requireContext(), "Please select a date", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val selectedDate = sdf.parse(selectedDateText)
             val todayUtc = MaterialDatePicker.todayInUtcMilliseconds()
-
             if (selectedDate != null && selectedDate.time > todayUtc) {
                 Toast.makeText(
                     requireContext(),
@@ -114,18 +113,32 @@ class FilterFragment : BottomSheetDialogFragment() {
                 binding.etDate.performClick()
                 return@setOnClickListener
             }
+            val selectedCategory =
+                binding.chipGroupCategory.checkedChipId.takeIf { it != View.NO_ID }?.let { id ->
+                    (binding.chipGroupCategory.findViewById<Chip>(id)).text.toString()
+                }
+            if (selectedCategory == null) {
+                Toast.makeText(requireContext(), "Please select a category", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val value = binding.sentimentSlider.values
+            val sentimentMin = value[0]
+            val sentimentMax = value[1]
+            val filterState = FilterState(date = selectedDate?.time, category = selectedCategory, sentimentMin = sentimentMin, sentimentMax = sentimentMax)
+            mainVM.applyFilters(filterState)
+            Toast.makeText(requireContext() , "Filters applied", Toast.LENGTH_SHORT).show()
+            dismiss()
 
-            // Continue with apply logic here
         }
         binding.btnReset.setOnClickListener {
-                binding.etDate.setText("")
-                binding.sentimentSlider.setValues(-0.5f, 0.5f)
-                for (i in 0 until binding.chipGroupCategory.childCount) {
-                    val child = binding.chipGroupCategory.getChildAt(i)
-                    if (child is Chip) {
-                        child.isChecked = false
-                    }
+            binding.etDate.setText("")
+            binding.sentimentSlider.setValues(-0.5f, 0.5f)
+            for (i in 0 until binding.chipGroupCategory.childCount) {
+                val child = binding.chipGroupCategory.getChildAt(i)
+                if (child is Chip) {
+                    child.isChecked = false
                 }
+            }
         }
     }
 

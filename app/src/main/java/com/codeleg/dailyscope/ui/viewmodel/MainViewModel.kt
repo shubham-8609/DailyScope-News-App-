@@ -1,24 +1,27 @@
 package com.codeleg.dailyscope.ui.viewmodel
 
-import android.util.Log
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.codeleg.dailyscope.database.local.ArticleEntity
-import com.codeleg.dailyscope.database.model.Article
-import com.codeleg.dailyscope.database.model.NewsUiState
 import com.codeleg.dailyscope.database.repository.NewsRepository
-import com.codeleg.dailyscope.utils.Resource
-import kotlinx.coroutines.flow.Flow
+import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
-import kotlin.collections.emptyList
 
 class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
     val news = newsRepo.getPagedNewsFromDb().cachedIn(viewModelScope)
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    val filterState = MutableStateFlow(FilterState())
+    val filteredNews = filterState.flatMapLatest { state ->
+        newsRepo.getFilteredNews(state)
+    }.cachedIn(viewModelScope)
+    fun applyFilters(filter: FilterState) {
+        filterState.value = filter
+    }
     fun refreshNews(){
         viewModelScope.launch {
             _isRefreshing.value = true
@@ -27,4 +30,6 @@ class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
         }
     }
 
+
+    suspend fun getCategories() =  newsRepo.getCategoriesFromDb()
 }

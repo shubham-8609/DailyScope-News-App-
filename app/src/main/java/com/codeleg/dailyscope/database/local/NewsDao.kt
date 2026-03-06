@@ -17,14 +17,28 @@ interface NewsDao {
     @Query("DELETE FROM articles")
     suspend fun deleteAllArticles()
 
-    @Query("SELECT * FROM articles ORDER BY publishDate DESC")
-    fun getAllArticles(): Flow<List<ArticleEntity>>
-
     @Query("UPDATE articles SET isBookmarked = :state WHERE url = :url")
     suspend fun updateBookmark(url: String, state: Boolean)
 
     @Query("SELECT * FROM articles ORDER BY publishDate DESC")
     fun getPagedArticles(): PagingSource<Int , ArticleEntity>
+
+    @Query("SELECT DISTINCT category FROM articles")
+    suspend fun getCategories(): List<String?>
+
+    @Query("""
+SELECT * FROM articles
+WHERE (:category IS NULL OR category = :category)
+AND (:date IS NULL OR publishDate >= :date)
+AND sentiment BETWEEN :sentimentMin AND :sentimentMax
+ORDER BY publishDate DESC
+""")
+    fun getFilteredNews(
+        category: String?,
+        date: Long?,
+        sentimentMin: Float,
+        sentimentMax: Float
+    ): PagingSource <Int, ArticleEntity>
 
     @Query("SELECT * FROM articles WHERE isBookmarked = 1")
     fun getBookmarkedArticles(): Flow<List<ArticleEntity>>
