@@ -14,6 +14,13 @@
         android:title="Filter News"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/option_clear_filter"
+        android:icon="@drawable/rounded_close_small_24"
+        android:title="Clear Filter"
+        app:showAsAction="never"
+        />
+
 
 
 </menu>

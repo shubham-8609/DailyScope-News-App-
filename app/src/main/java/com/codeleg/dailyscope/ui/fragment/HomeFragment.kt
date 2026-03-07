@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -22,6 +23,7 @@ import com.codeleg.dailyscope.databinding.FragmentHomeBinding
 import com.codeleg.dailyscope.ui.adapter.NewsListAdapter
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -59,21 +61,16 @@ class HomeFragment : Fragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                mainVM.filteredNews.collectLatest { pagingData ->
-                    newsAdapter.submitData(pagingData)
-                }
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainVM.isRefreshing.collect { isRefreshing ->
                     binding.swipeRefresh.isRefreshing = isRefreshing
                 }
             }
         }
+        binding.swipeRefresh.setOnRefreshListener {
+            refreshNews()
 
-        binding.swipeRefresh.setOnRefreshListener { mainVM.refreshNews() }
+        }
         requireActivity().addMenuProvider(object: MenuProvider{
             override fun onCreateMenu(
                 menu: Menu,
@@ -81,17 +78,33 @@ class HomeFragment : Fragment() {
             ) {
                 menu.clear()
                 menuInflater.inflate(com.codeleg.dailyscope.R.menu.home_menu, menu)
+                val clearFilterItem =   menu.findItem(R.id.option_clear_filter)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        mainVM.filterState.collect { state ->
+                            val isApplied = state.category != null || state.date != null
+                            clearFilterItem?.isVisible = isApplied
+                        }
+                    }
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+
+
                 return when(menuItem.itemId){
                     R.id.option_refresh -> {
-                        mainVM.refreshNews()
+                        refreshNews()
                         true
                     }
                     R.id.option_filter_news -> {
                         // Handle filter news action
                         FilterFragment().show(parentFragmentManager , "FilterFragment")
+                        true
+                    }
+                    R.id.option_clear_filter -> {
+                        mainVM.clearFilters()
+                        Toast.makeText(requireActivity() , "Filters cleared. Showing all news." , Toast.LENGTH_SHORT).show()
                         true
                     }
                     else -> false
@@ -100,6 +113,14 @@ class HomeFragment : Fragment() {
 
 
         } , viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun refreshNews() {
+        mainVM.refreshNews()
+        if(mainVM.isFilterApplied){
+            Toast.makeText(requireActivity() , "Filters are reset after refresh. Please apply filters again." , Toast.LENGTH_SHORT).show()
+            mainVM.clearFilters()
+        }
     }
 
     private fun setupRecyclerView() {

@@ -84,15 +84,18 @@ class FilterFragment : BottomSheetDialogFragment() {
         lifecycleScope.launch {
             val categories = mainVM.getCategories()
             categories.forEach { category ->
+                category?.let {
                 val chip = Chip(requireContext()).apply {
-                    text = category ?: "Unknown"
+                    text = category
                     isCheckable = true
                 }
                 binding.chipGroupCategory.addView(chip)
+                }
 
             }
         }
         binding.sentimentSlider.setValues(-1f, 1f)
+        if(mainVM.isFilterApplied) applyPreviousFilters()
         binding.etDate.setOnClickListener {
             datePicker.show(parentFragmentManager, "datePicker")
         }
@@ -141,6 +144,24 @@ class FilterFragment : BottomSheetDialogFragment() {
                 }
             }
         }
+    }
+
+    private fun applyPreviousFilters() {
+        binding.tvFilterTitle.text = "Update Filters"
+        val filterState = mainVM.filterState.value
+        filterState.date?.let {
+            binding.etDate.setText(sdf.format(Date(it)))
+        }
+        filterState.category?.let { category ->
+            for (i in 0 until binding.chipGroupCategory.childCount) {
+                val child = binding.chipGroupCategory.getChildAt(i)
+                if (child is Chip && child.text == category) {
+                    child.isChecked = true
+                    break
+                }
+            }
+        }
+        binding.sentimentSlider.setValues(filterState.sentimentMin, filterState.sentimentMax)
     }
 
 }
