@@ -1,14 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.ArticleFragment">
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+<com.facebook.shimmer.ShimmerFrameLayout
+    android:id="@+id/shimmerLayout"
+    android:layout_height="match_parent"
+    app:shimmer_auto_start="true"
+    android:layout_width="match_parent"
+    >
+
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This is article Fragment" />
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Hero Image Placeholder -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240sdp"
+                android:background="@drawable/shimmer_placeholder"/>
+
+            <!-- Content Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="18dp"
+                android:paddingTop="16dp">
+
+                <!-- Category -->
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Title Line 1 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Title Line 2 -->
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_marginRight="@dimen/_40sdp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Meta -->
+                <View
+                    android:layout_width="140dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Content Lines -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_50sdp"
+                    android:background="@drawable/shimmer_placeholder"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</com.facebook.shimmer.ShimmerFrameLayout>
+
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/article_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:fillViewport="true"
+        tools:context=".ui.fragment.ArticleFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Hero Image Section -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240sdp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/articleImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/news_placeholder"
+                    app:shapeAppearanceOverlay="@style/RoundedTopImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <!-- Gradient overlay -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/black_gradient_overlay"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <!-- Category -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/articleCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Technology"
+                    android:textColor="@android:color/white"
+                    android:layout_margin="16dp"
+                    android:backgroundTint="#66000000"
+                    app:chipCornerRadius="14dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <!-- Title -->
+                <TextView
+                    android:id="@+id/articleTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:maxLines="3"
+                    android:textIsSelectable="true"
+                    android:ellipsize="end"
+                    android:padding="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="China hikes defence budget to USD 275 billion"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!-- Article Info Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="18dp"
+                android:paddingTop="16dp">
+
+                <!-- Author + Date -->
+                <TextView
+                    android:id="@+id/articleMeta"
+                    android:layout_width="match_parent"
+                    android:textIsSelectable="true"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    tools:text="By PTI • March 5, 2026"/>
+
+                <!-- Divider -->
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"/>
+
+                <!-- Article Content -->
+                <TextView
+                    android:id="@+id/articleContent"
+                    android:layout_width="match_parent"
+                    android:textIsSelectable="true"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBodyLarge"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="?attr/colorOnSurface"
+                    tools:text="China on Thursday hiked its defence budget to USD 275 billion, about USD 25 billion more than last year as it ramped the modernisation of armed forces..."/>
+
+                <!-- Bottom spacing -->
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>
