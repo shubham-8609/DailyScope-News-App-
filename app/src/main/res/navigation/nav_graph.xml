@@ -12,22 +12,42 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_articleFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
             app:destination="@id/articleFragment" />
         <action
             android:id="@+id/action_homeFragment_to_categoryFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
             app:destination="@id/categoryFragment" />
         <action
             android:id="@+id/action_homeFragment_to_bookmarkFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
             app:destination="@id/bookmarkFragment" />
         <action
             android:id="@+id/action_homeFragment_to_settingsFragment2"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
             app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.codeleg.dailyscope.ui.fragment.ArticleFragment"
         android:label="fragment_article"
-        tools:layout="@layout/fragment_article" />
+        tools:layout="@layout/fragment_article" >
+        <argument
+            android:name="article"
+            app:argType="com.codeleg.dailyscope.database.model.Article"/>
+    </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.codeleg.dailyscope.ui.fragment.CategoryFragment"
