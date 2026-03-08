@@ -1,34 +1,118 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <!-- ================= API SETTINGS ================= -->
+
+    <PreferenceCategory
+        app:title="API Settings">
 
         <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+            app:key="api_key"
+            app:title="API Key"
+            app:summary="Enter your News API key"
+            app:useSimpleSummaryProvider="true"/>
 
         <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+            app:key="country"
+            app:title="Source Country"
+            app:entries="@array/country_entries"
+            app:entryValues="@array/country_values"
+            app:defaultValue="us"
+            app:useSimpleSummaryProvider="true"/>
+
+        <ListPreference
+            app:key="language"
+            app:title="Language"
+            app:entries="@array/language_entries"
+            app:entryValues="@array/language_values"
+            app:defaultValue="en"
+            app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+
+    <!-- ================= NEWS FETCH OPTIONS ================= -->
+
+    <PreferenceCategory
+        app:title="News Fetch Options">
+
+        <SwitchPreferenceCompat
+            app:key="headlines_only"
+            app:title="Headlines Only"
+            app:summary="Fetch only titles and URLs to reduce network usage"/>
+
+        <EditTextPreference
+            app:key="max_news_per_cluster"
+            app:title="Max News Per Cluster"
+            app:summary="Maximum articles fetched per news cluster"
+            app:defaultValue="1"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:key="news_date"
+            app:title="Fetch News For Date"
+            app:summary="Format: YYYY-MM-DD (leave empty for today)"
+            app:useSimpleSummaryProvider="true"/>
+
+    </PreferenceCategory>
+
+
+    <!-- ================= APP PREFERENCES ================= -->
+
+    <PreferenceCategory
+        app:title="Application Settings">
 
         <SwitchPreferenceCompat
             app:key="sync"
-            app:title="@string/sync_title" />
+            app:title="Auto Sync News"
+            app:summary="Automatically refresh news in background"/>
 
         <SwitchPreferenceCompat
-            app:dependency="sync"
             app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:title="Download Images"
+            app:summaryOn="Images will be downloaded"
+            app:summaryOff="Images will not be downloaded"
+            app:dependency="sync"/>
+
+    </PreferenceCategory>
+
+
+    <!-- ================= ABOUT APPLICATION ================= -->
+
+    <PreferenceCategory
+        app:title="About Application">
+
+        <Preference
+            app:key="app_version"
+            app:title="App Version"
+            app:summary="1.0.0"/>
+
+        <Preference
+            app:key="app_description"
+            app:title="About DailyScope"
+            app:summary="DailyScope is a modern news reader built with Kotlin, MVVM, Room, and Retrofit. It aggregates global news and allows powerful filtering and offline access."/>
+
+    </PreferenceCategory>
+
+
+    <!-- ================= ABOUT DEVELOPER ================= -->
+
+    <PreferenceCategory
+        app:title="About Developer">
+
+        <Preference
+            app:key="developer_name"
+            app:title="Developer"
+            app:summary="Shubham"/>
+
+        <Preference
+            app:key="github"
+            app:title="GitHub Repository"
+            app:summary="View project source code"/>
+
+        <Preference
+            app:key="contact"
+            app:title="Contact Developer"
+            app:summary="Send feedback or report bugs"/>
 
     </PreferenceCategory>
 

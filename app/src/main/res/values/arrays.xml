@@ -1,12 +1,27 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
+    <string-array name="country_entries">
+        <item>United States</item>
+        <item>India</item>
+        <item>United Kingdom</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="country_values">
+        <item>us</item>
+        <item>in</item>
+        <item>gb</item>
     </string-array>
+
+
+    <string-array name="language_entries">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Spanish</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>en</item>
+        <item>hi</item>
+        <item>es</item>
+    </string-array>
+
 </resources>
