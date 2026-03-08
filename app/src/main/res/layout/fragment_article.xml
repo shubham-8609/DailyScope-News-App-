@@ -218,14 +218,35 @@
                 android:paddingTop="16dp">
 
                 <!-- Author + Date -->
-                <TextView
-                    android:id="@+id/articleMeta"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:textIsSelectable="true"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceBodySmall"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    tools:text="By PTI • March 5, 2026"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/articleMeta"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textIsSelectable="true"
+                        android:textAppearance="?attr/textAppearanceBodySmall"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        tools:text="By PTI • March 5, 2026"/>
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/speakButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:contentDescription="Listen article"
+                        app:srcCompat="@drawable/outline_select_to_speak_24"
+                        app:backgroundTint="@android:color/transparent"
+                        android:alpha="0.5"
+                        app:tint="@android:color/white"
+                        app:fabSize="mini"/>
+
+                </LinearLayout>
 
                 <!-- Divider -->
                 <com.google.android.material.divider.MaterialDivider

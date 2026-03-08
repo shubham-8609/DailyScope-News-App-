@@ -3,6 +3,7 @@ package com.codeleg.dailyscope.ui.fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -23,6 +24,7 @@ import kotlin.getValue
 import androidx.core.net.toUri
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
+import java.util.Locale
 
 class ArticleFragment : Fragment() {
 
@@ -31,6 +33,8 @@ class ArticleFragment : Fragment() {
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
     private lateinit var article: Article
+    private lateinit var textToSpeech: TextToSpeech
+    private var isSpeaking = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -48,6 +52,22 @@ class ArticleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         article = args.article
         populateData()
+        lifecycleScope.launch {
+            textToSpeech = TextToSpeech(requireContext()) { status ->
+
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeech.language = Locale.US
+                }
+
+            }
+        }
+        binding.speakButton.setOnClickListener {
+            if (isSpeaking) {
+                stopSpeaking()
+            } else {
+                speakArticle()
+            }
+        }
         requireActivity().addMenuProvider(object : MenuProvider {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -61,10 +81,12 @@ class ArticleFragment : Fragment() {
                         openInBrowser()
                         true
                     }
+
                     R.id.option_share_article -> {
                         shareArticle()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -104,14 +126,43 @@ class ArticleFragment : Fragment() {
         startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
 
+    private fun speakArticle(){
+        val text = "${article.title}. ${article.text}. Summary:  ${article.summary ?: "No summary available."}"
+
+        textToSpeech.speak(
+            text,
+            TextToSpeech.QUEUE_FLUSH,
+            null,
+            null
+        )
+        binding.speakButton.alpha = 1f
+
+        isSpeaking = true
+    }
+    private fun stopSpeaking() {
+
+        if (textToSpeech.isSpeaking) {
+            textToSpeech.stop()
+        }
+        binding.speakButton.alpha  = 0.5f
+        isSpeaking = false
+    }
+
     private fun openInBrowser() {
         val url = article.url
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
 
+    override fun onPause() {
+        super.onPause()
+        if(isSpeaking) stopSpeaking()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        textToSpeech.stop()
+        textToSpeech.shutdown()
     }
 }
