@@ -1,8 +1,13 @@
 package com.codeleg.dailyscope.ui.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -15,6 +20,9 @@ import com.codeleg.dailyscope.databinding.FragmentArticleBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.getValue
+import androidx.core.net.toUri
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 
 class ArticleFragment : Fragment() {
 
@@ -38,10 +46,29 @@ class ArticleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         article = args.article
         populateData()
+        requireActivity().addMenuProvider(object : MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.article_page_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.option_open_in_web -> {
+                        openInBrowser()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
     }
 
     private fun populateData() {
@@ -56,7 +83,7 @@ class ArticleFragment : Fragment() {
             article.publishDate.take(10)
         } | " + "Sentiment: ${article.sentiment ?: "N/A"}"
         binding.articleMeta.text = metaData
-        lifecycleScope.launch{
+        lifecycleScope.launch {
             delay(700) // Simulate loading delay
             binding.shimmerLayout.stopShimmer()
             binding.shimmerLayout.visibility = View.GONE
@@ -64,6 +91,21 @@ class ArticleFragment : Fragment() {
         }
     }
 
+    private fun shareArticle() {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, article.title)
+            putExtra(Intent.EXTRA_TEXT, "${article.title}\n${article.url}")
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Share via"))
+    }
+
+    private fun openInBrowser() {
+        val url = article.url
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
