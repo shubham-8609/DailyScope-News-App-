@@ -7,6 +7,8 @@ import com.codeleg.dailyscope.R
 class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        val dataStore = SettingsDataStore(requireContext().settingsDataStore)
+        preferenceManager.preferenceDataStore = dataStore
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
     }
 }
