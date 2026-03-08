@@ -1,7 +1,10 @@
 package com.codeleg.dailyscope.database.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Article(
     val id: Long,
     val title: String,
@@ -18,4 +21,4 @@ data class Article(
     @SerializedName("source_country")
     val sourceCountry: String?,
     val sentiment: Double?
-)
+) : Parcelable

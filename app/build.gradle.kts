@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.kapt")
+    id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin") version "2.7.7" apply true
 }
 
 android {
@@ -27,14 +29,17 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = "17"
     }
-    buildFeatures{
+
+    buildFeatures {
         viewBinding = true
     }
 }
@@ -50,10 +55,6 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    /* -------------------- Lifecycle (MVVM) -------------------- */
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-
     /* -------------------- Coroutines -------------------- */
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
@@ -68,16 +69,20 @@ dependencies {
 
     /* -------------------- Glide -------------------- */
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    /* -------------------- Navigation -------------------- */
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    /* -------------------- Preferences -------------------- */
     implementation(libs.androidx.preference)
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
 
     /* -------------------- UI Utils -------------------- */
     implementation("com.intuit.sdp:sdp-android:1.1.1")
     implementation("com.intuit.ssp:ssp-android:1.1.1")
 
-    /* -------------------- Room -------------------- ~*/
+    /* -------------------- Room -------------------- */
     implementation("androidx.room:room-runtime:2.8.4")
     implementation("androidx.room:room-ktx:2.8.4")
     kapt("androidx.room:room-compiler:2.8.4")
@@ -86,8 +91,10 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.room:room-paging:2.6.1")
 
+    /* -------------------- UI Components -------------------- */
     implementation("androidx.viewpager2:viewpager2:1.1.0")
-    implementation( "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 
     /* -------------------- Testing -------------------- */
     testImplementation(libs.junit)

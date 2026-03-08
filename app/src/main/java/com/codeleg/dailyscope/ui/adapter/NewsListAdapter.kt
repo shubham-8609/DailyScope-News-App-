@@ -11,7 +11,7 @@ import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
 
 
-class NewsListAdapter :
+class NewsListAdapter(private val onItemClick: (Article) -> Unit) :
     PagingDataAdapter<Article, NewsListAdapter.NewsViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(
@@ -30,6 +30,11 @@ class NewsListAdapter :
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+                getItem(position)?.let { article ->
+                    onItemClick(article)
+                }
+            }
     }
 
     class NewsViewHolder(

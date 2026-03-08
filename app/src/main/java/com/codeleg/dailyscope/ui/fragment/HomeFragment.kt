@@ -15,8 +15,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.R
+import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.database.network.RetrofitInstance
 import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.databinding.FragmentHomeBinding
@@ -124,11 +126,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsListAdapter()
+        newsAdapter = NewsListAdapter(::onItemClicked)
         binding.rvNews.apply {
             adapter = newsAdapter
             setHasFixedSize(true)
         }
+    }
+
+    private fun onItemClicked(article: Article) {
+
+        val action = HomeFragmentDirections.actionHomeFragmentToArticleFragment(article)
+        findNavController().navigate(action)
+
+        Log.d("codeleg", "Article clicked with ID: ${article.id}")
     }
 
     override fun onDestroyView() {
