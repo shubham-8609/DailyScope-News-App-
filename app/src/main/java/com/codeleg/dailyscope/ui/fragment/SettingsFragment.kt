@@ -3,6 +3,7 @@ package com.codeleg.dailyscope.ui.fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.codeleg.dailyscope.R
@@ -16,7 +17,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val dataStore = SettingsDataStore(requireContext().settingsDataStore)
         preferenceManager.preferenceDataStore = dataStore
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
+        setupChangeListeners()
         setupExternalLinks()
 
     }
@@ -53,7 +54,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         contactPref?.setOnPreferenceClickListener {
 
             val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = "mailto:shubhamguuat8609@email.com".toUri()
+                data = "mailto:shubhamgupta8609@email.com".toUri()
                 putExtra(Intent.EXTRA_SUBJECT, "DailyScope Feedback")
             }
 
@@ -61,4 +62,35 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
     }
+
+
+    private fun setupChangeListeners() {
+
+        val keys = listOf(
+            "country",
+            "language",
+            "headlines_only",
+            "max_news_per_cluster",
+            "news_date",
+            "sync",
+            "attachment"
+        )
+
+        keys.forEach { key ->
+
+            val pref = findPreference<Preference>(key)
+
+            pref?.onPreferenceChangeListener =
+                Preference.OnPreferenceChangeListener { _, _ ->
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Changes will take effect after restart",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    true // allow change
+                }
+        }
+        }
 }

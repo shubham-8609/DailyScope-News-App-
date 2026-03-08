@@ -5,12 +5,6 @@
     <PreferenceCategory
         app:title="API Settings">
 
-        <EditTextPreference
-            app:key="api_key"
-            app:title="API Key"
-            app:summary="Enter your News API key"
-            app:useSimpleSummaryProvider="true"/>
-
         <ListPreference
             app:key="country"
             app:title="Source Country"
@@ -33,12 +27,12 @@
     <!-- ================= NEWS FETCH OPTIONS ================= -->
 
     <PreferenceCategory
-        app:title="News Fetch Options">
+        app:title="Top-news fetch Options">
 
         <SwitchPreferenceCompat
             app:key="headlines_only"
             app:title="Headlines Only"
-            app:summary="Fetch only titles and URLs to reduce network usage"/>
+            app:summary="Fetch headlines only in top news "/>
 
         <EditTextPreference
             app:key="max_news_per_cluster"

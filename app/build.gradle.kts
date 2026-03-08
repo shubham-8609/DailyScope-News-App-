@@ -77,6 +77,7 @@ dependencies {
 
     /* -------------------- Preferences -------------------- */
     implementation(libs.androidx.preference)
+    implementation("androidx.datastore:datastore-preferences:1.2.0")
 
     /* -------------------- UI Utils -------------------- */
     implementation("com.intuit.sdp:sdp-android:1.1.1")
