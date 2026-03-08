@@ -9,8 +9,10 @@ import com.codeleg.dailyscope.database.local.NewsDao
 import com.codeleg.dailyscope.database.local.toArticle
 import com.codeleg.dailyscope.database.local.toEntity
 import com.codeleg.dailyscope.database.model.Article
+import com.codeleg.dailyscope.database.model.RetrieveNewsResponse
 import com.codeleg.dailyscope.database.network.NewsApiService
 import com.codeleg.dailyscope.utils.FilterState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -65,6 +67,8 @@ class NewsRepository(
             false
         }
     }
+
+    suspend fun retrieveNewsById(id: Long) = withContext(Dispatchers.IO){newsApi.retrieveNews(id)}
 
     suspend fun getCategoriesFromDb(): List<String?> = newsDao.getCategories()
 
