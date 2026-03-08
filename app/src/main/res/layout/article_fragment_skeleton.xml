@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Hero Image Placeholder -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_240sdp"
+                android:background="@drawable/shimmer_placeholder"/>
+
+            <!-- Content Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="18dp"
+                android:paddingTop="16dp">
+
+                <!-- Category -->
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Title Line 1 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Title Line 2 -->
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_marginRight="@dimen/_40sdp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Meta -->
+                <View
+                    android:layout_width="140dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#DDDDDD"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Content Lines -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:background="@drawable/shimmer_placeholder"
+                    android:layout_marginBottom="8dp"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="18dp"
+                    android:layout_marginRight="@dimen/_50sdp"
+                    android:background="@drawable/shimmer_placeholder"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
