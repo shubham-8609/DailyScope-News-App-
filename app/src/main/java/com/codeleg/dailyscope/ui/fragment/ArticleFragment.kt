@@ -61,7 +61,10 @@ class ArticleFragment : Fragment() {
                         openInBrowser()
                         true
                     }
-
+                    R.id.option_share_article -> {
+                        shareArticle()
+                        true
+                    }
                     else -> false
                 }
             }
