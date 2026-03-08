@@ -36,4 +36,34 @@ class ArticleFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        article = args.article
+        populateData()
+    }
+
+    private fun populateData() {
+
+        binding.articleTitle.text = article.title
+        binding.articleContent.text = article.text
+        Glide.with(binding.articleImage.context).load(article.image).centerCrop()
+            .placeholder(R.drawable.news_placeholder).error(R.drawable.image_unavailable)
+            .into(binding.articleImage)
+        binding.articleCategory.text = article.category ?: "Unknown"
+        val metaData = "By ${article.authors?.joinToString(", ") ?: "Unknown"} | " + "${
+            article.publishDate.take(10)
+        } | " + "Sentiment: ${article.sentiment ?: "N/A"}"
+        binding.articleMeta.text = metaData
+        binding.shimmerLayout.stopShimmer()
+        binding.shimmerLayout.visibility = View.GONE
+        binding.articleContentLayout.visibility = View.VISIBLE
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

@@ -164,4 +164,9 @@ class FilterFragment : BottomSheetDialogFragment() {
         binding.sentimentSlider.setValues(filterState.sentimentMin, filterState.sentimentMax)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }
