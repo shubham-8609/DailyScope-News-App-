@@ -56,9 +56,12 @@ class ArticleFragment : Fragment() {
             article.publishDate.take(10)
         } | " + "Sentiment: ${article.sentiment ?: "N/A"}"
         binding.articleMeta.text = metaData
-        binding.shimmerLayout.stopShimmer()
-        binding.shimmerLayout.visibility = View.GONE
-        binding.articleContentLayout.visibility = View.VISIBLE
+        lifecycleScope.launch{
+            delay(700) // Simulate loading delay
+            binding.shimmerLayout.stopShimmer()
+            binding.shimmerLayout.visibility = View.GONE
+            binding.articleContentLayout.visibility = View.VISIBLE
+        }
     }
 
 
