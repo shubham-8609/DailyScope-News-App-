@@ -18,11 +18,17 @@ import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
 import com.codeleg.dailyscope.utils.showWarningToast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import kotlin.getValue
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
+    private val settingsRepo by lazy {
+        (requireActivity().application as DailyScope).settingsRepository
+    }
     private val mainVM: MainViewModel by activityViewModels {
         val newsRepo = (requireActivity().application as DailyScope).newsRepository
         MainViewModelFactory(newsRepo)
@@ -43,6 +49,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
         deleteImagesPref?.setOnPreferenceClickListener {
             showDeleteConfirmation("Clear Cached Images" , "This will clear all cached news images and cannot be undone." , ::deleteCachedImages)
             true
+        }
+        val cachePref = findPreference<Preference>("cache_size")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val cacheDir = File(requireContext().cacheDir, "image_manager_disk_cache")
+            val size = settingsRepo.findCacheSize(cacheDir)
+            withContext(Dispatchers.Main){cachePref?.summary = size}
         }
 
     }
@@ -147,4 +159,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
             requireActivity().showWarningToast(requireActivity() , "Cached images have been cleared.")
         }
     }
+
+
 }

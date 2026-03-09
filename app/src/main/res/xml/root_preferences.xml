@@ -67,10 +67,6 @@
             app:summary="Remove all downloaded news images"
             app:title="Clear Downloaded Images" />
 
-        <Preference
-            app:key="clear_database"
-            app:summary="Delete all saved articles and reset app"
-            app:title="Reset Local Database" />
 
     </PreferenceCategory>
 
