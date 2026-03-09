@@ -1,29 +1,5 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- ================= API SETTINGS ================= -->
-
-    <PreferenceCategory
-        app:title="API Settings">
-
-        <ListPreference
-            app:key="country"
-            app:title="Source Country"
-            app:entries="@array/country_entries"
-            app:entryValues="@array/country_values"
-            app:defaultValue="us"
-            app:useSimpleSummaryProvider="true"/>
-
-        <ListPreference
-            app:key="language"
-            app:title="Language"
-            app:entries="@array/language_entries"
-            app:entryValues="@array/language_values"
-            app:defaultValue="en"
-            app:useSimpleSummaryProvider="true"/>
-
-    </PreferenceCategory>
-
-
     <!-- ================= NEWS FETCH OPTIONS ================= -->
 
     <PreferenceCategory
@@ -32,7 +8,10 @@
         <SwitchPreferenceCompat
             app:key="headlines_only"
             app:title="Headlines Only"
-            app:summary="Fetch headlines only in top news "/>
+            app:summary="Fetch headlines only in top news "
+            app:enabled="false"
+
+            />
 
         <EditTextPreference
             app:key="max_news_per_cluster"
@@ -58,7 +37,9 @@
         <SwitchPreferenceCompat
             app:key="sync"
             app:title="Auto Sync News"
-            app:summary="Automatically refresh news in background"/>
+            app:summary="Automatically refresh news in background"
+            app:enabled="false"
+            />
 
         <SwitchPreferenceCompat
             app:key="attachment"

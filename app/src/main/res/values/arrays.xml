@@ -1,16 +1,4 @@
 <resources>
-    <string-array name="country_entries">
-        <item>United States</item>
-        <item>India</item>
-        <item>United Kingdom</item>
-    </string-array>
-
-    <string-array name="country_values">
-        <item>us</item>
-        <item>in</item>
-        <item>gb</item>
-    </string-array>
-
 
     <string-array name="language_entries">
         <item>English</item>

@@ -14,6 +14,7 @@ import com.codeleg.dailyscope.database.network.NewsApiService
 import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import okhttp3.Dispatcher
@@ -46,7 +47,7 @@ class NewsRepository(
         return try {
             Log.d("codeleg", "Refreshing news from API...")
             val response = newsApi.getLatestNews(
-                country = country,
+                country = country ,
                 language = language,
                 headlinesOnly = headlinesOnly
             )

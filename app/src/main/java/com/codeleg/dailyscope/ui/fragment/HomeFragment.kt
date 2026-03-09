@@ -33,8 +33,10 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private lateinit var newsAdapter: NewsListAdapter
-    private val newsRepo = (requireActivity().application as DailyScope).newsRepository
-    private val mainVM: MainViewModel by activityViewModels { MainViewModelFactory(newsRepo) }
+    private val mainVM: MainViewModel by activityViewModels {
+        val newsRepo = (requireActivity().application as DailyScope).newsRepository
+        MainViewModelFactory(newsRepo)
+    }
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
