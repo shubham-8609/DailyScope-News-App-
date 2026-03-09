@@ -2,92 +2,112 @@
 
     <!-- ================= NEWS FETCH OPTIONS ================= -->
 
-    <PreferenceCategory
-        app:title="Top-news fetch Options">
+    <PreferenceCategory app:title="Top-news fetch Options">
 
         <SwitchPreferenceCompat
-            app:key="headlines_only"
-            app:title="Headlines Only"
-            app:summary="Fetch headlines only in top news "
             app:enabled="false"
+            app:key="headlines_only"
+            app:summary="Fetch headlines only in top news "
+            app:title="Headlines Only"
 
             />
 
         <EditTextPreference
-            app:key="max_news_per_cluster"
-            app:title="Max News Per Cluster"
-            app:summary="Maximum articles fetched per news cluster"
             app:defaultValue="1"
-            app:useSimpleSummaryProvider="true"/>
+            app:key="max_news_per_cluster"
+            app:summary="Maximum articles fetched per news cluster"
+            app:title="Max News Per Cluster"
+            app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             app:key="news_date"
-            app:title="Fetch News For Date"
             app:summary="Format: YYYY-MM-DD (leave empty for today)"
-            app:useSimpleSummaryProvider="true"/>
+            app:title="Fetch News For Date"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
 
     <!-- ================= APP PREFERENCES ================= -->
 
-    <PreferenceCategory
-        app:title="Application Settings">
+    <PreferenceCategory app:title="Application Settings">
 
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="Auto Sync News"
-            app:summary="Automatically refresh news in background"
             app:enabled="false"
-            />
+            app:key="sync"
+            app:summary="Automatically refresh news in background"
+            app:title="Auto Sync News" />
 
         <SwitchPreferenceCompat
+            app:dependency="sync"
             app:key="attachment"
-            app:title="Download Images"
-            app:summaryOn="Images will be downloaded"
             app:summaryOff="Images will not be downloaded"
-            app:dependency="sync"/>
+            app:summaryOn="Images will be downloaded"
+            app:title="Download Images" />
 
     </PreferenceCategory>
 
+    <!-- ================= STORAGE MANAGEMENT ================= -->
+
+
+    <PreferenceCategory app:title="Cache Options">
+
+        <Preference
+            app:key="cache_size"
+            app:summary="Calculating..."
+            app:title="Current Cache Size" />
+
+        <Preference
+            app:key="delete_all_news"
+            app:summary="Remove all stored news articles from the local database"
+            app:title="Delete All News" />
+
+        <Preference
+            app:key="clear_images"
+            app:summary="Remove all downloaded news images"
+            app:title="Clear Downloaded Images" />
+
+        <Preference
+            app:key="clear_database"
+            app:summary="Delete all saved articles and reset app"
+            app:title="Reset Local Database" />
+
+    </PreferenceCategory>
 
     <!-- ================= ABOUT APPLICATION ================= -->
 
-    <PreferenceCategory
-        app:title="About Application">
+    <PreferenceCategory app:title="About Application">
 
         <Preference
             app:key="app_version"
-            app:title="App Version"
-            app:summary="1.0.0"/>
+            app:summary="1.0.0"
+            app:title="App Version" />
 
         <Preference
             app:key="app_description"
-            app:title="About DailyScope"
-            app:summary="DailyScope is a modern news reader built with Kotlin, MVVM, Room, and Retrofit. It aggregates global news and allows powerful filtering and offline access."/>
+            app:summary="DailyScope is a modern news reader built with Kotlin, MVVM, Room, and Retrofit. It aggregates global news and allows powerful filtering and offline access."
+            app:title="About DailyScope" />
 
     </PreferenceCategory>
 
-
     <!-- ================= ABOUT DEVELOPER ================= -->
 
-    <PreferenceCategory
-        app:title="About Developer">
+    <PreferenceCategory app:title="About Developer">
 
         <Preference
             app:key="developer_name"
-            app:title="Developer"
-            app:summary="Shubham"/>
+            app:summary="Shubham"
+            app:title="Developer" />
 
         <Preference
             app:key="github"
-            app:title="GitHub Repository"
-            app:summary="View project source code"/>
+            app:summary="View project source code"
+            app:title="GitHub Repository" />
 
         <Preference
             app:key="contact"
-            app:title="Contact Developer"
-            app:summary="Send feedback or report bugs"/>
+            app:summary="Send feedback or report bugs"
+            app:title="Contact Developer" />
 
     </PreferenceCategory>
 
