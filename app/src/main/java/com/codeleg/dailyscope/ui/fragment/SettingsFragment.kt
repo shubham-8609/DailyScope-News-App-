@@ -4,14 +4,29 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.preference.SettingsDataStore
 import com.codeleg.dailyscope.database.preference.settingsDataStore
 import androidx.core.net.toUri
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import com.codeleg.dailyscope.DailyScope
+import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
+import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import com.codeleg.dailyscope.utils.showWarningToast
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class SettingsFragment : PreferenceFragmentCompat() {
+
+    private val mainVM: MainViewModel by activityViewModels {
+        val newsRepo = (requireActivity().application as DailyScope).newsRepository
+        MainViewModelFactory(newsRepo)
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val dataStore = SettingsDataStore(requireContext().settingsDataStore)
@@ -19,8 +34,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
         setupChangeListeners()
         setupExternalLinks()
+        val deleteNewsPref = findPreference<Preference>("delete_all_news")
+        deleteNewsPref?.setOnPreferenceClickListener {
+            showDeleteConfirmation("Delete All News" , "This will permanently delete all stored news articles." , ::deleteAllNews )
+            true
+        }
+        val deleteImagesPref = findPreference<Preference>("clear_images")
+        deleteImagesPref?.setOnPreferenceClickListener {
+            showDeleteConfirmation("Clear Cached Images" , "This will clear all cached news images and cannot be undone." , ::deleteCachedImages)
+            true
+        }
 
     }
+
     private fun setupExternalLinks() {
 
         val githubPref = findPreference<Preference>("github")
@@ -92,5 +118,33 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     true // allow change
                 }
         }
+    }
+
+    private fun showDeleteConfirmation(title: String , message: String , onConfirm: () -> Unit ) {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Delete") { _, _ ->
+                onConfirm()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun deleteAllNews() {
+
+        lifecycleScope.launch {
+            mainVM.clearNewsDB()
+            requireActivity().showWarningToast(requireActivity() , "All news articles have been deleted.")
+
         }
+    }
+
+    private fun deleteCachedImages() {
+        lifecycleScope.launch {
+            mainVM.clearCachedImages(requireContext())
+            requireActivity().showWarningToast(requireActivity() , "Cached images have been cleared.")
+        }
+    }
 }

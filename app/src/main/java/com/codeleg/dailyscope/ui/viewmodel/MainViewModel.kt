@@ -1,11 +1,14 @@
 package com.codeleg.dailyscope.ui.viewmodel
 
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.bumptech.glide.Glide
 import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.utils.FilterState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +18,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
      val _filterState = MutableStateFlow(FilterState())
@@ -50,4 +54,14 @@ class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
     fun clearFilters() {
         _filterState.value = FilterState()
     }
+
+    suspend fun clearNewsDB() = newsRepo.clearDB()
+
+    suspend fun clearCachedImages(context: Context){
+        Glide.get(context).clearMemory()
+        withContext(Dispatchers.IO){
+            Glide.get(context).clearDiskCache()
+        }
+    }
+
 }
