@@ -6,6 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
@@ -42,6 +43,7 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit) :
     ) : ViewHolder(binding.root) {
 
         fun bind(article: Article?) {
+            Glide.with(binding.newsImage.context).clear(binding.newsImage)
             with(binding) {
                 article?.let {
                     newsTitle.text = article.title
@@ -54,6 +56,8 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit) :
                     Glide.with(newsImage.context)
                         .load(article.image)
                         .centerCrop()
+                        .override(600, 325)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .placeholder(R.drawable.news_placeholder)
                         .error(R.drawable.image_unavailable)
                         .into(newsImage)
