@@ -32,12 +32,7 @@ import kotlin.getValue
 
 class FilterFragment : BottomSheetDialogFragment() {
 
-    private val newsRepo by lazy {
-        NewsRepository(
-            RetrofitInstance.newsApi,
-            (requireActivity().application as DailyScope).newsDao
-        )
-    }
+    private val newsRepo = (requireActivity().application as DailyScope).newsRepository
     private val mainVM: MainViewModel by activityViewModels { MainViewModelFactory(newsRepo) }
     private var _binding: FragmentFilterBinding? = null
     private val binding get() = _binding!!

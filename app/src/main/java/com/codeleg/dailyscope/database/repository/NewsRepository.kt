@@ -20,7 +20,8 @@ import okhttp3.Dispatcher
 
 class NewsRepository(
     private val newsApi: NewsApiService,
-    private val newsDao: NewsDao
+    private val newsDao: NewsDao,
+    private val settingsRepo: SettingsRepository
 ) {
 
 

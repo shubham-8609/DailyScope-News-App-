@@ -2,12 +2,27 @@ package com.codeleg.dailyscope
 
 import android.app.Application
 import com.codeleg.dailyscope.database.local.NewsDB
-import com.codeleg.dailyscope.database.local.NewsDao
+import com.codeleg.dailyscope.database.network.RetrofitInstance
+import com.codeleg.dailyscope.database.preference.settingsDataStore
+import com.codeleg.dailyscope.database.repository.NewsRepository
+import com.codeleg.dailyscope.database.repository.SettingsRepository
 
 class DailyScope : Application() {
 
-    val newsDao: NewsDao by lazy {
-        NewsDB.getDatabase(this).newsDao()
-    }
+    lateinit var newsRepository: NewsRepository
+    lateinit var settingsRepository: SettingsRepository
 
+    override fun onCreate() {
+        super.onCreate()
+
+        val newsDao = NewsDB.getDatabase(this).newsDao()
+
+        settingsRepository = SettingsRepository(settingsDataStore)
+
+        newsRepository = NewsRepository(
+            RetrofitInstance.newsApi,
+            newsDao,
+            settingsRepository
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package com.codeleg.dailyscope.ui.fragment
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,9 +33,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private lateinit var newsAdapter: NewsListAdapter
-    private val newsRepo by lazy {
-        NewsRepository(RetrofitInstance.newsApi, (requireActivity().application as DailyScope).newsDao)
-    }
+    private val newsRepo = (requireActivity().application as DailyScope).newsRepository
     private val mainVM: MainViewModel by activityViewModels { MainViewModelFactory(newsRepo) }
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
