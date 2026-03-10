@@ -1,10 +1,8 @@
 package com.codeleg.dailyscope.ui.fragment
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.codeleg.dailyscope.R
@@ -45,16 +43,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
             showDeleteConfirmation("Delete All News" , "This will permanently delete all stored news articles." , ::deleteAllNews )
             true
         }
-        val deleteImagesPref = findPreference<Preference>("clear_images")
-        deleteImagesPref?.setOnPreferenceClickListener {
-            showDeleteConfirmation("Clear Cached Images" , "This will clear all cached news images and cannot be undone." , ::deleteCachedImages)
+        val clearCachePref = findPreference<Preference>("clear_cache")
+        clearCachePref?.setOnPreferenceClickListener {
+            showDeleteConfirmation("Clear cache ? " , "This will clear all cached news images and cannot be undone." , ::deleteCachedImages)
             true
         }
-        val cachePref = findPreference<Preference>("cache_size")
         lifecycleScope.launch(Dispatchers.IO) {
             val cacheDir = File(requireContext().cacheDir, "image_manager_disk_cache")
             val size = settingsRepo.findCacheSize(cacheDir)
-            withContext(Dispatchers.Main){cachePref?.summary = size}
+            withContext(Dispatchers.Main){clearCachePref?.summary = " Current cache size: $size"}
         }
 
     }

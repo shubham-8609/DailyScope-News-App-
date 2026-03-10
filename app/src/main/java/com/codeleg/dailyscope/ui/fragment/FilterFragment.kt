@@ -32,8 +32,11 @@ import kotlin.getValue
 
 class FilterFragment : BottomSheetDialogFragment() {
 
-    private val newsRepo = (requireActivity().application as DailyScope).newsRepository
-    private val mainVM: MainViewModel by activityViewModels { MainViewModelFactory(newsRepo) }
+
+    private val mainVM: MainViewModel by activityViewModels {
+        val newsRepo = (requireActivity().application as DailyScope).newsRepository
+        MainViewModelFactory(newsRepo)
+    }
     private var _binding: FragmentFilterBinding? = null
     private val binding get() = _binding!!
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -49,15 +52,12 @@ class FilterFragment : BottomSheetDialogFragment() {
             startCalendar.timeInMillis = todayUtc
             startCalendar.add(Calendar.MONTH, -1)
 
-            val constraints = CalendarConstraints.Builder()
-                .setStart(startCalendar.timeInMillis)
-                .setEnd(todayUtc)
-                .build()
+            val constraints =
+                CalendarConstraints.Builder().setStart(startCalendar.timeInMillis).setEnd(todayUtc)
+                    .build()
 
-            datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setCalendarConstraints(constraints)
-                .build()
+            datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select date")
+                .setCalendarConstraints(constraints).build()
 
             datePicker.addOnPositiveButtonClickListener { timestamp ->
                 binding.etDate.setText(sdf.format(Date(timestamp)))
@@ -67,8 +67,7 @@ class FilterFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFilterBinding.inflate(inflater, container, false)
         return binding.root
@@ -80,17 +79,17 @@ class FilterFragment : BottomSheetDialogFragment() {
             val categories = mainVM.getCategories()
             categories.forEach { category ->
                 category?.let {
-                val chip = Chip(requireContext()).apply {
-                    text = category
-                    isCheckable = true
-                }
-                binding.chipGroupCategory.addView(chip)
+                    val chip = Chip(requireContext()).apply {
+                        text = category
+                        isCheckable = true
+                    }
+                    binding.chipGroupCategory.addView(chip)
                 }
 
             }
         }
         binding.sentimentSlider.setValues(-1f, 1f)
-        if(mainVM.isFilterApplied) applyPreviousFilters()
+        if (mainVM.isFilterApplied) applyPreviousFilters()
         binding.etDate.setOnClickListener {
             datePicker.show(parentFragmentManager, "datePicker")
         }
@@ -116,16 +115,22 @@ class FilterFragment : BottomSheetDialogFragment() {
                     (binding.chipGroupCategory.findViewById<Chip>(id)).text.toString()
                 }
             if (selectedCategory == null) {
-                Toast.makeText(requireContext(), "Please select a category", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Please select a category", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
             val value = binding.sentimentSlider.values
             val sentimentMin = value[0]
             val sentimentMax = value[1]
-            val filterState = FilterState(date = selectedDate?.time, category = selectedCategory, sentimentMin = sentimentMin, sentimentMax = sentimentMax)
+            val filterState = FilterState(
+                date = selectedDate?.time,
+                category = selectedCategory,
+                sentimentMin = sentimentMin,
+                sentimentMax = sentimentMax
+            )
             mainVM.applyFilters(filterState)
-            Toast.makeText(requireContext() , "Filters applied", Toast.LENGTH_SHORT).show()
-            Log.d("codeleg" , "Applied filters: $filterState --filterFragment")
+            Toast.makeText(requireContext(), "Filters applied", Toast.LENGTH_SHORT).show()
+            Log.d("codeleg", "Applied filters: $filterState --filterFragment")
             dismiss()
 
         }

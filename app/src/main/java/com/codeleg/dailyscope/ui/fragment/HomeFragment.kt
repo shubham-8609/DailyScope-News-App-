@@ -124,6 +124,7 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireActivity() , "Filters are reset after refresh. Please apply filters again." , Toast.LENGTH_SHORT).show()
             mainVM.clearFilters()
         }
+        binding.rvNews.scrollToPosition(0)
     }
 
     private fun setupRecyclerView() {

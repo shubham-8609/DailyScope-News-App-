@@ -1,109 +1,130 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- ================= NEWS FETCH OPTIONS ================= -->
+    <!-- ================= NEWS FETCH SETTINGS ================= -->
 
-    <PreferenceCategory app:title="Top-news fetch Options">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="News Fetch Settings">
 
         <SwitchPreferenceCompat
-            app:enabled="false"
             app:key="headlines_only"
-            app:summary="Fetch headlines only in top news "
             app:title="Headlines Only"
-
-            />
+            app:summary="Fetch only headline articles for faster loading"
+            app:icon="@drawable/ic_headlines"
+            app:enabled="false" />
 
         <EditTextPreference
-            app:defaultValue="1"
             app:key="max_news_per_cluster"
-            app:summary="Maximum articles fetched per news cluster"
-            app:title="Max News Per Cluster"
-            app:useSimpleSummaryProvider="true" />
+            app:title="Articles Per Cluster"
+            app:summary="Maximum number of articles fetched in each cluster"
+            app:defaultValue="1"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_article" />
 
         <EditTextPreference
             app:key="news_date"
-            app:summary="Format: YYYY-MM-DD (leave empty for today)"
-            app:title="Fetch News For Date"
-            app:useSimpleSummaryProvider="true" />
+            app:title="Fetch News By Date"
+            app:summary="Format: YYYY-MM-DD (leave empty for today's news)"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_calendar" />
 
     </PreferenceCategory>
 
 
-    <!-- ================= APP PREFERENCES ================= -->
+    <!-- ================= BACKGROUND SYNC ================= -->
 
-    <PreferenceCategory app:title="Application Settings">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Background Sync">
 
         <SwitchPreferenceCompat
-            app:enabled="false"
             app:key="sync"
-            app:summary="Automatically refresh news in background"
-            app:title="Auto Sync News" />
+            app:title="Auto Refresh News"
+            app:summary="Automatically fetch latest news in background"
+            app:icon="@drawable/ic_sync"
+            app:enabled="false" />
 
         <SwitchPreferenceCompat
-            app:dependency="sync"
             app:key="attachment"
+            app:title="Download Images"
+            app:summaryOn="Images will be downloaded for offline viewing"
             app:summaryOff="Images will not be downloaded"
-            app:summaryOn="Images will be downloaded"
-            app:title="Download Images" />
+            app:dependency="sync"
+            app:icon="@drawable/ic_image" />
 
     </PreferenceCategory>
 
-    <!-- ================= STORAGE MANAGEMENT ================= -->
 
+    <!-- ================= STORAGE ================= -->
 
-    <PreferenceCategory app:title="Cache Options">
+    <PreferenceCategory
+        app:title="Storage and  Cache"
+        app:iconSpaceReserved="false">
 
         <Preference
-            app:key="cache_size"
+            app:key="clear_cache"
+            app:title="Clear Cache"
             app:summary="Calculating..."
-            app:title="Current Cache Size" />
+            app:icon="@drawable/ic_clear"
+            app:selectable="false" />
 
         <Preference
             app:key="delete_all_news"
-            app:summary="Remove all stored news articles from the local database"
-            app:title="Delete All News" />
-
-        <Preference
-            app:key="clear_images"
-            app:summary="Remove all downloaded news images"
-            app:title="Clear Downloaded Images" />
-
+            app:title="Delete All News"
+            app:summary="Remove all stored news articles from the device"
+            app:icon="@drawable/ic_delete"
+            app:persistent="false" />
 
     </PreferenceCategory>
 
-    <!-- ================= ABOUT APPLICATION ================= -->
 
-    <PreferenceCategory app:title="About Application">
+    <!-- ================= ABOUT ================= -->
 
-        <Preference
-            app:key="app_version"
-            app:summary="1.0.0"
-            app:title="App Version" />
+    <PreferenceCategory
+        app:title="About DailyScope"
+        app:iconSpaceReserved="false">
 
         <Preference
             app:key="app_description"
-            app:summary="DailyScope is a modern news reader built with Kotlin, MVVM, Room, and Retrofit. It aggregates global news and allows powerful filtering and offline access."
-            app:title="About DailyScope" />
+            app:title="About App"
+            app:summary="DailyScope is a modern news reader built with Kotlin, MVVM, Room, and Retrofit. It aggregates global news and supports offline reading."
+            app:icon="@drawable/ic_info"
+            app:selectable="false" />
 
-    </PreferenceCategory>
-
-    <!-- ================= ABOUT DEVELOPER ================= -->
-
-    <PreferenceCategory app:title="About Developer">
+        <Preference
+            app:key="app_version"
+            app:title="App Version"
+            app:summary="1.0.0"
+            app:icon="@drawable/ic_android"
+            app:selectable="false" />
 
         <Preference
             app:key="developer_name"
+            app:title="Developer"
             app:summary="Shubham"
-            app:title="Developer" />
+            app:icon="@drawable/ic_person"
+            app:selectable="false" />
+
+    </PreferenceCategory>
+
+
+    <!-- ================= SUPPORT ================= -->
+
+    <PreferenceCategory
+        app:title="Support Links"
+        app:iconSpaceReserved="false">
 
         <Preference
             app:key="github"
+            app:title="GitHub Repository"
             app:summary="View project source code"
-            app:title="GitHub Repository" />
+            app:icon="@drawable/ic_github" />
 
         <Preference
             app:key="contact"
+            app:title="Contact Developer"
             app:summary="Send feedback or report bugs"
-            app:title="Contact Developer" />
+            app:icon="@drawable/ic_email" />
 
     </PreferenceCategory>
 
