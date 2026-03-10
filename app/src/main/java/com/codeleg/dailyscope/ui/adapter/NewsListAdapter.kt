@@ -12,7 +12,7 @@ import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
 
 
-class NewsListAdapter(private val onItemClick: (Article) -> Unit) :
+class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val onBookmarkClick: (Article) -> Unit) :
     PagingDataAdapter<Article, NewsListAdapter.NewsViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(
@@ -26,20 +26,21 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit) :
             false
         )
 
-        return NewsViewHolder(binding)
+        return NewsViewHolder(binding , onBookmarkClick)
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
-                getItem(position)?.let { article ->
-                    onItemClick(article)
-                }
+            getItem(position)?.let { article ->
+                onItemClick(article)
             }
+        }
     }
 
     class NewsViewHolder(
-        private val binding: ItemArticleBinding
+        private val binding: ItemArticleBinding,
+        private val onBookmarkClick: (Article) -> Unit
     ) : ViewHolder(binding.root) {
 
         fun bind(article: Article?) {
@@ -53,6 +54,7 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit) :
                             "${article.publishDate.take(10)} | " +
                             "Sentiment: ${article.sentiment ?: "N/A"}"
                     newsMeta.text = metaData
+                    bookmarkBtn.setImageResource(if(article.isBookmarked) R.drawable.filled_bookmark_24 else R.drawable.outline_bookmark_24)
                     Glide.with(newsImage.context)
                         .load(article.image)
                         .centerCrop()
@@ -61,6 +63,7 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit) :
                         .placeholder(R.drawable.news_placeholder)
                         .error(R.drawable.image_unavailable)
                         .into(newsImage)
+                    bookmarkBtn.setOnClickListener { onBookmarkClick(article) }
 
                 }
             }

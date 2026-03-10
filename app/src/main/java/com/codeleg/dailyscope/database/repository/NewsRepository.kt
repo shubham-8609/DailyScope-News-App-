@@ -9,15 +9,12 @@ import com.codeleg.dailyscope.database.local.NewsDao
 import com.codeleg.dailyscope.database.local.toArticle
 import com.codeleg.dailyscope.database.local.toEntity
 import com.codeleg.dailyscope.database.model.Article
-import com.codeleg.dailyscope.database.model.RetrieveNewsResponse
 import com.codeleg.dailyscope.database.network.NewsApiService
 import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 
 class NewsRepository(
     private val newsApi: NewsApiService,
@@ -39,6 +36,8 @@ class NewsRepository(
 
     }
 
+    fun getBookmarkedArticles(): Flow<List<Article>> =
+        newsDao.getBookmarkedArticles().map { entities -> entities.map { it.toArticle() } }
     suspend fun refreshNews(
         country: String = "in",
         language: String = "en",
@@ -94,6 +93,7 @@ class NewsRepository(
 
     suspend fun getTotalNewsCount() = newsDao.getTotalNewsCount()
 
-
-
+    suspend fun updateBookmark(url: String, state: Boolean) = withContext(Dispatchers.IO) {
+        newsDao.updateBookmark(url, state)
+    }
 }

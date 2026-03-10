@@ -44,7 +44,11 @@ ORDER BY publishDate DESC
         sentimentMax: Float
     ): PagingSource <Int, ArticleEntity>
 
-    @Query("SELECT * FROM articles WHERE isBookmarked = 1")
+    @Query("""
+SELECT * FROM articles
+WHERE isBookmarked = 1
+ORDER BY publishDate DESC
+""")
     fun getBookmarkedArticles(): Flow<List<ArticleEntity>>
 
 

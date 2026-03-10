@@ -13,6 +13,7 @@ data class Article(
     val url: String,
     val image: String?,
     val video: String?,
+    var isBookmarked: Boolean = false,
     @SerializedName("publish_date")
     val publishDate: String,
     val authors: List<String>?,

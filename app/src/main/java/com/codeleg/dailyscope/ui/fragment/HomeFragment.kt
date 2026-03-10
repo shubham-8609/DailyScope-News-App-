@@ -27,6 +27,7 @@ import com.codeleg.dailyscope.ui.adapter.NewsListAdapter
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
 import com.codeleg.dailyscope.utils.FilterState
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -128,7 +129,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsListAdapter(::onItemClicked)
+        newsAdapter = NewsListAdapter(::onItemClicked, ::onBookmarkClicked)
         binding.rvNews.apply {
             adapter = newsAdapter
             setHasFixedSize(true)
@@ -141,6 +142,11 @@ class HomeFragment : Fragment() {
         findNavController().navigate(action)
 
         Log.d("codeleg", "Article clicked with ID: ${article.id}")
+    }
+
+    private fun onBookmarkClicked(article: Article) {
+        mainVM.toggleBookmark(article)
+        Snackbar.make(binding.root , if (article.isBookmarked) "Removed from bookmarks" else "Added to bookmarks", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

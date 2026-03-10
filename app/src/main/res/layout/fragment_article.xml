@@ -83,6 +83,17 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
+                <ImageButton
+                    android:id="@+id/bookmarkButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/icon_bookmark"
+                    android:contentDescription="Bookmark article"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
                 <!-- Title -->
                 <TextView
                     android:id="@+id/articleTitle"

@@ -5,9 +5,8 @@ import androidx.room.Database
 import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.codeleg.dailyscope.database.model.Article
 
-@Database(entities = [ArticleEntity::class], version = 1, exportSchema = false)
+@Database(entities = [ArticleEntity::class], version = 2, exportSchema = false)
 @TypeConverters(Convertors::class)
 abstract class NewsDB : RoomDatabase(){
 
@@ -22,7 +21,8 @@ abstract class NewsDB : RoomDatabase(){
                         context.applicationContext,
                         NewsDB::class.java,
                         "news_database"
-                    ).build()
+                    ).fallbackToDestructiveMigration()
+                        .build()
                     INSTANCE = instance
                     instance
                 }

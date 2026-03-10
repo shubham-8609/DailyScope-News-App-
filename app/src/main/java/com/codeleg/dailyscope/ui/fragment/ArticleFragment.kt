@@ -23,8 +23,14 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 import androidx.core.net.toUri
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import com.codeleg.dailyscope.DailyScope
+import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
+import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
+import kotlin.getValue
 
 class ArticleFragment : Fragment() {
 
@@ -32,6 +38,11 @@ class ArticleFragment : Fragment() {
 
     private var _binding: FragmentArticleBinding? = null
     private val binding get() = _binding!!
+    private val mainVM: MainViewModel by activityViewModels {
+        val newsRepo = (requireActivity().application as DailyScope).newsRepository
+        MainViewModelFactory(newsRepo)
+    }
+
     private lateinit var article: Article
     private lateinit var textToSpeech: TextToSpeech
     private var isSpeaking = false
@@ -44,7 +55,6 @@ class ArticleFragment : Fragment() {
 
         val article: Article = args.article
         Log.d("codeleg", "Received article ID: ${article.id}, title: ${article.title}")
-
         return binding.root
     }
 
@@ -61,12 +71,19 @@ class ArticleFragment : Fragment() {
 
             }
         }
+        binding.bookmarkButton.setImageResource(if(article.isBookmarked) R.drawable.filled_bookmark_24 else R.drawable.outline_bookmark_24)
         binding.speakButton.setOnClickListener {
             if (isSpeaking) {
                 stopSpeaking()
             } else {
                 speakArticle()
             }
+        }
+        binding.bookmarkButton.setOnClickListener { it ->
+            mainVM.toggleBookmark(article)
+            binding.bookmarkButton.setImageResource(if(!article.isBookmarked) R.drawable.filled_bookmark_24 else R.drawable.outline_bookmark_24)
+             Snackbar.make(it, if(!article.isBookmarked) "Article bookmarked" else "Bookmark removed", Snackbar.LENGTH_SHORT).show()
+            article.isBookmarked = !article.isBookmarked
         }
         requireActivity().addMenuProvider(object : MenuProvider {
 
@@ -157,6 +174,11 @@ class ArticleFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         if(isSpeaking) stopSpeaking()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        speakArticle()
     }
 
     override fun onDestroyView() {

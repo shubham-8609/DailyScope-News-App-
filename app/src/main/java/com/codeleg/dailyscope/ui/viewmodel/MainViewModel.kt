@@ -2,6 +2,7 @@ package com.codeleg.dailyscope.ui.viewmodel
 
 
 import android.content.Context
+import com.codeleg.dailyscope.database.model.Article
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -35,6 +36,7 @@ class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
             }
         }
         .cachedIn(viewModelScope)
+    val bookmarkedArticles = newsRepo.getBookmarkedArticles()
     val isFilterApplied: Boolean
         get() = filterState.value.category != null || filterState.value.date != null
     fun applyFilters(filter: FilterState) {
@@ -49,6 +51,12 @@ class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
         }
     }
 
+
+    fun toggleBookmark(article: Article) {
+        viewModelScope.launch {
+            newsRepo.updateBookmark(article.url, !article.isBookmarked)
+        }
+    }
 
     suspend fun getCategories() =  newsRepo.getCategoriesFromDb()
     fun clearFilters() {
