@@ -2,6 +2,10 @@ package com.codeleg.dailyscope.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -9,7 +13,9 @@ import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.preference.SettingsDataStore
 import com.codeleg.dailyscope.database.preference.settingsDataStore
 import androidx.core.net.toUri
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
@@ -27,6 +33,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val settingsRepo by lazy {
         (requireActivity().application as DailyScope).settingsRepository
     }
+    private  var clearCachePref : Preference? = null
+    private  var deleteNewsPref : Preference? = null
     private val mainVM: MainViewModel by activityViewModels {
         val newsRepo = (requireActivity().application as DailyScope).newsRepository
         MainViewModelFactory(newsRepo)
@@ -38,22 +46,59 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
         setupChangeListeners()
         setupExternalLinks()
-        val deleteNewsPref = findPreference<Preference>("delete_all_news")
+         deleteNewsPref = findPreference("delete_all_news")
         deleteNewsPref?.setOnPreferenceClickListener {
             showDeleteConfirmation("Delete All News" , "This will permanently delete all stored news articles." , ::deleteAllNews )
             true
         }
-        val clearCachePref = findPreference<Preference>("clear_cache")
+
+         clearCachePref = findPreference("clear_cache")
         clearCachePref?.setOnPreferenceClickListener {
             showDeleteConfirmation("Clear cache ? " , "This will clear all cached news images and cannot be undone." , ::deleteCachedImages)
             true
         }
+       showStorageInfo()
+
+    }
+
+    private fun showStorageInfo() {
         lifecycleScope.launch(Dispatchers.IO) {
             val cacheDir = File(requireContext().cacheDir, "image_manager_disk_cache")
             val size = settingsRepo.findCacheSize(cacheDir)
-            withContext(Dispatchers.Main){clearCachePref?.summary = " Current cache size: $size"}
+            val totalNewsCount = mainVM.getTotalNewsCount()
+            val newsSummary = if(totalNewsCount==0) "No news stored" else "$totalNewsCount articles stored"
+            withContext(Dispatchers.Main) {
+                view?.post {
+                    clearCachePref?.summary = "Current cache size: $size"
+                    deleteNewsPref?.summary = newsSummary
+                }
+            }
         }
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(object : MenuProvider{
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater
+            ) {
+                menu.clear()
+                menuInflater.inflate(com.codeleg.dailyscope.R.menu.settings_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when(menuItem.itemId){
+                    R.id.option_refresh -> {
+
+                        true
+                    }
+
+                    else -> true
+                }
+            }
+
+        }, viewLifecycleOwner , Lifecycle.State.RESUMED)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setupExternalLinks() {
@@ -154,6 +199,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         lifecycleScope.launch {
             mainVM.clearCachedImages(requireContext())
             requireActivity().showWarningToast(requireActivity() , "Cached images have been cleared.")
+            showStorageInfo()
         }
     }
 

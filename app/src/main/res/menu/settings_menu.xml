@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/option_reset_settings"
+        android:title="Reset to Default"
+        android:icon="@drawable/outline_reset_settings_24"
+        app:showAsAction="never" />
+
+</menu>

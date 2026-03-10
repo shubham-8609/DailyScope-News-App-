@@ -64,4 +64,6 @@ class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
         }
     }
 
+    suspend fun getTotalNewsCount(): Int = newsRepo.getTotalNewsCount()
+
 }

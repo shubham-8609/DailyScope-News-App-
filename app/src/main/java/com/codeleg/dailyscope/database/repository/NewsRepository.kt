@@ -92,6 +92,8 @@ class NewsRepository(
 
     suspend fun clearDB()  = newsDao.deleteAllArticles()
 
+    suspend fun getTotalNewsCount() = newsDao.getTotalNewsCount()
+
 
 
 }

@@ -26,6 +26,10 @@ interface NewsDao {
     @Query("SELECT DISTINCT category FROM articles")
     suspend fun getCategories(): List<String?>
 
+    // Getting total number of news
+    @Query("SELECT COUNT(*) FROM articles")
+    suspend fun getTotalNewsCount(): Int
+
     @Query("""
 SELECT * FROM articles
 WHERE (:category IS NULL OR category = :category)
