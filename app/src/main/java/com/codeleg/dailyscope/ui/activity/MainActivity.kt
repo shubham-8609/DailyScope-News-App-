@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
-                R.id.categoryFragment,
+                R.id.searchFragment,
                 R.id.bookmarkFragment,
                 R.id.settingsFragment
             )
@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
                     binding.toolbar.title = "Home"
                     binding.toolbar.subtitle = "Latest news and updates"
                 }
-                R.id.categoryFragment -> {
-                    binding.toolbar.title = "Category"
-                    binding.toolbar.subtitle = "Select a category"
+                R.id.searchFragment -> {
+                    binding.toolbar.title = "Search News"
+                    binding.toolbar.subtitle = "Find news you care about"
                 }
                 R.id.bookmarkFragment ->  {
                     binding.toolbar.title = "Bookmark"
