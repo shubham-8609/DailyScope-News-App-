@@ -57,7 +57,11 @@
         android:id="@+id/bookmarkFragment"
         android:name="com.codeleg.dailyscope.ui.fragment.BookmarkFragment"
         android:label="fragment_bookmark"
-        tools:layout="@layout/fragment_bookmark" />
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_bookmarkFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.codeleg.dailyscope.ui.fragment.SettingsFragment"

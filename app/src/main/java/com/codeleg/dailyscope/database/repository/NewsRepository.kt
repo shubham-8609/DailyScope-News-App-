@@ -91,6 +91,8 @@ class NewsRepository(
 
     suspend fun clearDB()  = newsDao.deleteAllArticles()
 
+    suspend fun clearBookmarks() = newsDao.clearBookmarks()
+
     suspend fun getTotalNewsCount() = newsDao.getTotalNewsCount()
 
     suspend fun updateBookmark(url: String, state: Boolean) = withContext(Dispatchers.IO) {

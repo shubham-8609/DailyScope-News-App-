@@ -52,4 +52,8 @@ ORDER BY publishDate DESC
     fun getBookmarkedArticles(): Flow<List<ArticleEntity>>
 
 
+    @Query("UPDATE articles SET isBookmarked = 0 WHERE isBookmarked = 1")
+    suspend fun clearBookmarks()
+
+
 }

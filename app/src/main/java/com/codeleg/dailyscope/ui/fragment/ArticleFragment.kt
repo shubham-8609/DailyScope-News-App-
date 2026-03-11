@@ -46,6 +46,7 @@ class ArticleFragment : Fragment() {
     private lateinit var article: Article
     private lateinit var textToSpeech: TextToSpeech
     private var isSpeaking = false
+    private var wasSpeaking = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -173,12 +174,17 @@ class ArticleFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if(isSpeaking) stopSpeaking()
+        if(isSpeaking) {
+            stopSpeaking()
+             wasSpeaking = true
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        speakArticle()
+        if(wasSpeaking){
+            speakArticle()
+        }
     }
 
     override fun onDestroyView() {

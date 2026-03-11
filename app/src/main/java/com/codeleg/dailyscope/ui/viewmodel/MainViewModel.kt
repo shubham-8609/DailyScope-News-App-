@@ -72,6 +72,12 @@ class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
         }
     }
 
+    fun clearBookmarks() {
+        viewModelScope.launch {
+            newsRepo.clearBookmarks()
+        }
+    }
+
     suspend fun getTotalNewsCount(): Int = newsRepo.getTotalNewsCount()
 
 }
