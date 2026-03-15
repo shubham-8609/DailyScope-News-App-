@@ -10,6 +10,7 @@ import com.codeleg.dailyscope.database.local.toArticle
 import com.codeleg.dailyscope.database.local.toEntity
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.database.network.NewsApiService
+import com.codeleg.dailyscope.database.paging.SearchNewsPagingSource
 import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -56,10 +57,12 @@ class NewsRepository(
 
             if (articles.isEmpty()) Log.d("codeleg", "Api returned empty list   --newsRepo")
 
-
-            // Map DTO -> Entity
+            val bookmarkedUrls = newsDao.getBookmarkedUrls().toSet()
             newsDao.insertArticles(
-                articles.map { it.toEntity() }
+                articles.map { article ->
+                    val isBookmarked = bookmarkedUrls.contains(article.url)
+                    article.copy(isBookmarked = isBookmarked).toEntity()
+                }
             )
             Log.d("codeleg", "Inserted ${articles.size} articles into DB")
             true
@@ -72,6 +75,23 @@ class NewsRepository(
     suspend fun retrieveNewsById(id: Long) = withContext(Dispatchers.IO){newsApi.retrieveNews(id)}
 
     suspend fun getCategoriesFromDb(): List<String?> = newsDao.getCategories()
+
+    fun searchNews(
+        query: String,
+        language: String? = "en"
+    ): Flow<PagingData<Article>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = {
+                SearchNewsPagingSource(
+                    api = newsApi,
+                    newsDao = newsDao,
+                    query = query,
+                    language = language
+                )
+            }
+        ).flow
+    }
 
     fun getFilteredNews(filter: FilterState): Flow<PagingData<Article>> {
         return Pager(
@@ -95,7 +115,7 @@ class NewsRepository(
 
     suspend fun getTotalNewsCount() = newsDao.getTotalNewsCount()
 
-    suspend fun updateBookmark(url: String, state: Boolean) = withContext(Dispatchers.IO) {
-        newsDao.updateBookmark(url, state)
+    suspend fun setBookmarkState(article: Article) = withContext(Dispatchers.IO) {
+        newsDao.insertArticles(listOf(article.toEntity()))
     }
 }

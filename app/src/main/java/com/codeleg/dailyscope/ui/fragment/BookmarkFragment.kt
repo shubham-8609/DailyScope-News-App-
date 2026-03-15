@@ -40,8 +40,8 @@ class BookmarkFragment : Fragment() {
                 findNavController().navigate(action)
             },
             onBookmarkClick = { article ->
-                mainVM.toggleBookmark(article)
-                Snackbar.make(binding.root , if (article.isBookmarked) "Removed from bookmarks" else "Added to bookmarks", Snackbar.LENGTH_SHORT).show()
+                mainVM.setBookmark(article)
+                Snackbar.make(binding.root , if (article.isBookmarked) "Added to bookmarks" else "Removed from bookmarks", Snackbar.LENGTH_SHORT).show()
             }
         )
     }

@@ -11,13 +11,9 @@ import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -52,9 +48,9 @@ class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
     }
 
 
-    fun toggleBookmark(article: Article) {
+    fun setBookmark(article: Article) {
         viewModelScope.launch {
-            newsRepo.updateBookmark(article.url, !article.isBookmarked)
+            newsRepo.setBookmarkState(article)
         }
     }
 

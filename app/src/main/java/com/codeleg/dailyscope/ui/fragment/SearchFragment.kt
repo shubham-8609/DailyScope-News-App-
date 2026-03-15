@@ -1,83 +1,208 @@
 package com.codeleg.dailyscope.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
+import androidx.activity.addCallback
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.R
+import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.FragmentSearchBinding
+import com.codeleg.dailyscope.ui.adapter.NewsListAdapter
+import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import com.codeleg.dailyscope.ui.viewmodel.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
-
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import androidx.paging.LoadState
 
 class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    private val searchViewModel: SearchViewModel by viewModels {
+        val newsRepo = (requireActivity().application as DailyScope).newsRepository
+        MainViewModelFactory(newsRepo)
     }
+    private lateinit var searchAdapter: NewsListAdapter
+    private var searchView: SearchView? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding  = FragmentSearchBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        setupSearchMenu()
+        collectResults()
+        observeLoadState()
+        setupBackPressHandling()
+    }
 
-       /* requireActivity().addMenuProvider(object: MenuProvider{
-            override fun onCreateMenu(
-                menu: Menu,
-                menuInflater: MenuInflater
-            ) {
-                menu.clear()
+    private fun setupRecyclerView() {
+        searchAdapter = NewsListAdapter(::onArticleClicked, ::onBookmarkClicked)
+        binding.rvSearchResults.adapter = searchAdapter
+        binding.rvSearchResults.setHasFixedSize(true)
+    }
+
+    private fun setupSearchMenu() {
+
+        requireActivity().addMenuProvider(object : MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.search_page_menu, menu)
-                val searchItem = menu.findItem(R.id.option_search_news)
-                val searchView = searchItem.actionView as SearchView
-                searchView.queryHint = "Search news..."
-                searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        if (query.isNullOrBlank()) {
-                            Snackbar.make(
-                                binding.root,
-                                "Please enter a search query",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+
+                val searchItem = menu.findItem(R.id.menu_search_action)
+                val searchActionView = searchItem.actionView as SearchView
+
+                searchView = searchActionView
+
+                searchView?.apply {
+
+                    queryHint = getString(R.string.search_hint)
+
+                    searchItem.expandActionView()
+
+                    isIconified = false
+                    requestFocus()
+
+                    showKeyboard(this)
+
+                    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+
+                            val term = query?.trim().orEmpty()
+
+                            if (term.isNotBlank()) {
+                                searchViewModel.submitQuery(term)
+                                clearFocus()
+                            }
+
                             return true
                         }
-                        return true
 
-                    }
+                        override fun onQueryTextChange(newText: String?): Boolean {
 
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        // You can implement live search here if needed
-                        return true
+                            val term = newText?.trim().orEmpty()
+
+                            if (term.isEmpty()) {
+                                searchViewModel.clearQuery()
+                            } else {
+                                searchViewModel.submitQuery(term)
+                            }
+
+                            return true
+                        }
+                    })
+
+                    setOnCloseListener {
+                        searchViewModel.clearQuery()
+                        true
                     }
-                })
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                TODO("Not yet implemented")
+                return false
             }
 
-        }, viewLifecycleOwner , Lifecycle.State.RESUMED)*/
-
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun collectResults() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.searchResults.collectLatest { pagingData ->
+                    binding.emptyState.isVisible = false
+                    searchAdapter.submitData(pagingData)
+                }
+            }
+        }
+    }
+
+    private fun observeLoadState() {
+        searchAdapter.addLoadStateListener { loadState ->
+            val query = searchViewModel.query.value
+            val isEmptyResult = loadState.refresh is LoadState.NotLoading && searchAdapter.itemCount == 0 && query.isNotBlank()
+            val shouldShowEmpty = query.isBlank() || isEmptyResult
+            binding.emptyState.isVisible = shouldShowEmpty
+            binding.emptyState.text = if (query.isBlank()) {
+                getString(R.string.search_empty_state)
+            } else {
+                getString(R.string.search_no_results)
+            }
+        }
+    }
+
+    private fun setupBackPressHandling() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            handleBack()
+        }
+    }
+
+    private fun handleBack() {
+
+        searchView?.let {
+
+            if (!it.isIconified) {
+                it.setQuery("", false)
+                it.isIconified = true
+                it.clearFocus()
+                hideKeyboard(it)
+                return
+            }
+        }
+
+        findNavController().navigateUp()
+    }
+
+    private fun onArticleClicked(article: Article) {
+        val action = SearchFragmentDirections.actionSearchFragmentToArticleFragment(article)
+        findNavController().navigate(action)
+    }
+
+    private fun onBookmarkClicked(article: Article) {
+        searchViewModel.setBookmark(article)
+        Snackbar.make(binding.root, if (article.isBookmarked) "Added to bookmarks" else "Removed from bookmarks", Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun showKeyboard(targetView: View) {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        targetView.post { imm.showSoftInput(targetView, InputMethodManager.SHOW_IMPLICIT) }
+    }
+
+    private fun hideKeyboard(targetView: View) {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(targetView.windowToken, 0)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchView = null
         _binding = null
     }
+
 
 }

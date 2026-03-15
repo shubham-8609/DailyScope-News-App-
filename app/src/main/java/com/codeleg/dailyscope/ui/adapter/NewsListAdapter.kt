@@ -63,7 +63,11 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val on
                         .placeholder(R.drawable.news_placeholder)
                         .error(R.drawable.image_unavailable)
                         .into(newsImage)
-                    bookmarkBtn.setOnClickListener { onBookmarkClick(article) }
+                    bookmarkBtn.setOnClickListener {
+                        val updated = article.copy(isBookmarked = !article.isBookmarked)
+                        bookmarkBtn.setImageResource(if(updated.isBookmarked) R.drawable.filled_bookmark_24 else R.drawable.outline_bookmark_24)
+                        onBookmarkClick(updated)
+                    }
 
                 }
             }

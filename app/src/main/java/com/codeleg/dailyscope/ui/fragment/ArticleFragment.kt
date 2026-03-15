@@ -81,10 +81,10 @@ class ArticleFragment : Fragment() {
             }
         }
         binding.bookmarkButton.setOnClickListener { it ->
-            mainVM.toggleBookmark(article)
-            binding.bookmarkButton.setImageResource(if(!article.isBookmarked) R.drawable.filled_bookmark_24 else R.drawable.outline_bookmark_24)
-             Snackbar.make(it, if(!article.isBookmarked) "Article bookmarked" else "Bookmark removed", Snackbar.LENGTH_SHORT).show()
-            article.isBookmarked = !article.isBookmarked
+            article = article.copy(isBookmarked = !article.isBookmarked)
+            mainVM.setBookmark(article)
+            binding.bookmarkButton.setImageResource(if(article.isBookmarked) R.drawable.filled_bookmark_24 else R.drawable.outline_bookmark_24)
+             Snackbar.make(it, if(article.isBookmarked) "Article bookmarked" else "Bookmark removed", Snackbar.LENGTH_SHORT).show()
         }
         requireActivity().addMenuProvider(object : MenuProvider {
 

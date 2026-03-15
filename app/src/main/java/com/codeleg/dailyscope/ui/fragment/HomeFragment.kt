@@ -106,6 +106,11 @@ class HomeFragment : Fragment() {
                         FilterFragment().show(parentFragmentManager , "FilterFragment")
                         true
                     }
+                    R.id.option_search_news -> {
+                        val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment()
+                        findNavController().navigate(action)
+                        true
+                    }
                     R.id.option_clear_filter -> {
                         mainVM.clearFilters()
                         Toast.makeText(requireActivity() , "Filters cleared. Showing all news." , Toast.LENGTH_SHORT).show()
@@ -145,8 +150,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun onBookmarkClicked(article: Article) {
-        mainVM.toggleBookmark(article)
-        Snackbar.make(binding.root , if (article.isBookmarked) "Removed from bookmarks" else "Added to bookmarks", Snackbar.LENGTH_SHORT).show()
+        mainVM.setBookmark(article)
+        Snackbar.make(binding.root , if (article.isBookmarked) "Added to bookmarks" else "Removed from bookmarks", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
