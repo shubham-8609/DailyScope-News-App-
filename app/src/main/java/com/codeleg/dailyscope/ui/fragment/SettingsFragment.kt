@@ -1,6 +1,7 @@
 package com.codeleg.dailyscope.ui.fragment
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -44,6 +45,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val dataStore = SettingsDataStore(requireContext().settingsDataStore)
         preferenceManager.preferenceDataStore = dataStore
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) findPreference<Preference>("material_you_enable")?.isVisible = true
         setupChangeListeners()
         setupExternalLinks()
          deleteNewsPref = findPreference("delete_all_news")
@@ -147,12 +149,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun setupChangeListeners() {
 
         val keys = listOf(
-            "country",
-            "language",
             "headlines_only",
             "max_news_per_cluster",
             "news_date",
             "sync",
+            "material_you_enable",
             "attachment"
         )
 

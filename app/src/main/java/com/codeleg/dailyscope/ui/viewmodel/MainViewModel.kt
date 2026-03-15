@@ -8,12 +8,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.bumptech.glide.Glide
 import com.codeleg.dailyscope.database.repository.NewsRepository
+import com.codeleg.dailyscope.database.repository.SettingsRepository
 import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -22,6 +25,12 @@ class MainViewModel(private val newsRepo: NewsRepository , private val settingsR
     val filterState = _filterState.asStateFlow()
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    val headlinesOnly = settingsRepo.headlinesOnlyFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    val autoSpeak = settingsRepo.autoSpeak.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    val darkMode = settingsRepo.darkModeFlow.stateIn(viewModelScope,  SharingStarted.WhileSubscribed(5000),
+        false)
+    val materialYou = settingsRepo.materialYouFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
 
     val news = filterState
         .flatMapLatest { state ->

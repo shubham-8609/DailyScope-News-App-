@@ -3,17 +3,32 @@ package com.codeleg.dailyscope.ui.activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.databinding.ActivityMainBinding
+import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
+import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import com.google.android.material.color.DynamicColors
+import kotlinx.coroutines.launch
+import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val mainVM : MainViewModel by viewModels {
+        val newsRepo = (application as DailyScope).newsRepository
+        val settingsRepo = (application as DailyScope).settingsRepository
+        MainViewModelFactory(newsRepo, settingsRepo)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -65,6 +80,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            mainVM.darkMode.collect { it ->
+                if (it) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            mainVM.materialYou.collect { it ->
+                if (it) {
+                    DynamicColors.applyToActivityIfAvailable(this@MainActivity)
+                }
+            }
+        }
 
     }
 
