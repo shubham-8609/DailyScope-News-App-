@@ -24,6 +24,7 @@ import com.codeleg.dailyscope.databinding.FragmentHomeBinding
 import com.codeleg.dailyscope.ui.adapter.NewsListAdapter
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -105,8 +106,9 @@ class HomeFragment : Fragment() {
                         true
                     }
                     R.id.option_search_news -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment()
-                        findNavController().navigate(action)
+                        requireActivity()
+                            .findViewById<BottomNavigationView>(R.id.bottom_nav)
+                            .selectedItemId = R.id.searchFragment
                         true
                     }
                     R.id.option_clear_filter -> {

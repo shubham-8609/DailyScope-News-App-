@@ -146,7 +146,7 @@
                         android:layout_marginStart="8dp"
                         android:contentDescription="Listen article"
                         app:srcCompat="@drawable/outline_select_to_speak_24"
-                        app:backgroundTint="@android:color/transparent"
+                        app:backgroundTint="?attr/colorSecondary"
                         android:alpha="0.5"
                         app:tint="@android:color/white"
                         app:fabSize="mini"/>

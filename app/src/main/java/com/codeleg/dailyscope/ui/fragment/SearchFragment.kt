@@ -30,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.paging.LoadState
+import com.google.android.material.chip.Chip
 
 class SearchFragment : Fragment() {
 
@@ -54,11 +55,37 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupRecyclerView()
         setupSearchMenu()
+        setupSuggestionChips()
         collectResults()
         observeLoadState()
         setupBackPressHandling()
+    }
+
+
+    private fun setupSuggestionChips() {
+
+        val chipGroup = binding.searchSuggestions
+
+        for (i in 0 until chipGroup.childCount) {
+
+            val chip = chipGroup.getChildAt(i) as? Chip ?: continue
+
+            chip.setOnClickListener {
+
+                val query = chip.text.toString()
+
+                searchView?.apply {
+                    setQuery(query, true) // true = submit
+                    clearFocus()
+                }
+
+                searchViewModel.submitQuery(query)
+                binding.suggestionContainer.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -92,6 +119,7 @@ class SearchFragment : Fragment() {
                             if (term.isNotBlank()) {
                                 searchViewModel.submitQuery(term)
                                 clearFocus()
+                                binding.suggestionContainer.visibility = View.GONE
                             }
 
                             return true
@@ -99,20 +127,13 @@ class SearchFragment : Fragment() {
 
                         override fun onQueryTextChange(newText: String?): Boolean {
 
-                            val term = newText?.trim().orEmpty()
-
-                            if (term.isEmpty()) {
-                                searchViewModel.clearQuery()
-                            } else {
-                                searchViewModel.submitQuery(term)
-                            }
-
                             return true
                         }
                     })
 
                     setOnCloseListener {
                         searchViewModel.clearQuery()
+                        binding.suggestionContainer.visibility = View.VISIBLE
                         true
                     }
 
@@ -145,24 +166,17 @@ class SearchFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 searchViewModel.searchResults.collectLatest { pagingData ->
-                    binding.emptyState.isVisible = false
                     searchAdapter.submitData(pagingData)
                 }
             }
         }
     }
-
     private fun observeLoadState() {
         searchAdapter.addLoadStateListener { loadState ->
             val query = searchViewModel.query.value
             val isEmptyResult = loadState.refresh is LoadState.NotLoading && searchAdapter.itemCount == 0 && query.isNotBlank()
-            val shouldShowEmpty = query.isBlank() || isEmptyResult
-            binding.emptyState.isVisible = shouldShowEmpty
-            binding.emptyState.text = if (query.isBlank()) {
-                getString(R.string.search_empty_state)
-            } else {
-                getString(R.string.search_no_results)
-            }
+            getString(R.string.search_no_results)
+
         }
     }
 
