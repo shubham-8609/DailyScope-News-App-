@@ -83,13 +83,6 @@ class SearchFragment : Fragment() {
 
                     queryHint = getString(R.string.search_hint)
 
-                    searchItem.expandActionView()
-
-                    isIconified = false
-                    requestFocus()
-
-                    showKeyboard(this)
-
                     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
                         override fun onQueryTextSubmit(query: String?): Boolean {
@@ -122,6 +115,8 @@ class SearchFragment : Fragment() {
                         searchViewModel.clearQuery()
                         true
                     }
+
+                    collectAutoOpenPreference(searchItem, this)
                 }
             }
 
@@ -130,6 +125,20 @@ class SearchFragment : Fragment() {
             }
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun collectAutoOpenPreference(searchItem: MenuItem, searchActionView: SearchView) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.autoOpenSearch
+                    .collectLatest { enabled ->
+                        if (enabled) {
+                            searchItem.expandActionView()
+                            searchActionView.onActionViewExpanded()
+                        }
+                    }
+            }
+        }
     }
 
     private fun collectResults() {

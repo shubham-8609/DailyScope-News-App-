@@ -54,8 +54,9 @@
         <SwitchPreferenceCompat
             app:key="auto_speak"
             app:title="Auto Speak"
-            app:summary="Automatically read news articles aloud when opened"
+            app:summary="Automatically read news articles aloud when opened. ⚠️ Unstable "
             android:icon="@drawable/icon_speak"
+            app:enabled="false"
             />
 
 

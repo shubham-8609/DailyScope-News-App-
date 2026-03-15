@@ -13,7 +13,7 @@ class MainViewModelFactory(private val newsRepo: NewsRepository  , private val s
             return MainViewModel(newsRepo, settingsRepo) as T
         }
         if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-            return SearchViewModel(newsRepo) as T
+            return SearchViewModel(newsRepo , settingsRepo) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

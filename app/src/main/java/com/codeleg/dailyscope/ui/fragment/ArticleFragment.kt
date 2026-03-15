@@ -13,15 +13,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.FragmentArticleBinding
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.getValue
-import androidx.core.net.toUri
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -30,7 +30,6 @@ import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
-import kotlin.getValue
 
 class ArticleFragment : Fragment() {
 
@@ -46,6 +45,7 @@ class ArticleFragment : Fragment() {
 
     private lateinit var article: Article
     private lateinit var textToSpeech: TextToSpeech
+    private var isTtsReady = false
     private var isSpeaking = false
     private var wasSpeaking = false
 
@@ -69,6 +69,7 @@ class ArticleFragment : Fragment() {
 
                 if (status == TextToSpeech.SUCCESS) {
                     textToSpeech.language = Locale.US
+                    isTtsReady = true
                 }
 
             }
@@ -112,6 +113,7 @@ class ArticleFragment : Fragment() {
 
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        observeAutoSpeak()
 
     }
 
@@ -146,6 +148,7 @@ class ArticleFragment : Fragment() {
     }
 
     private fun speakArticle(){
+        if (!isTtsReady) return
         val text = "${article.title}. ${article.text}. Summary:  ${article.summary ?: "No summary available."}"
 
         textToSpeech.speak(
@@ -193,5 +196,19 @@ class ArticleFragment : Fragment() {
         _binding = null
         textToSpeech.stop()
         textToSpeech.shutdown()
+    }
+
+    private fun observeAutoSpeak() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainVM.autoSpeak.collectLatest { enabled ->
+                    if (enabled ) {
+                        speakArticle()
+                    } else {
+                        stopSpeaking()
+                    }
+                }
+            }
+        }
     }
 }
