@@ -20,13 +20,10 @@ import androidx.navigation.fragment.findNavController
 import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.model.Article
-import com.codeleg.dailyscope.database.network.RetrofitInstance
-import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.databinding.FragmentHomeBinding
 import com.codeleg.dailyscope.ui.adapter.NewsListAdapter
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
-import com.codeleg.dailyscope.utils.FilterState
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,7 +33,8 @@ class HomeFragment : Fragment() {
     private lateinit var newsAdapter: NewsListAdapter
     private val mainVM: MainViewModel by activityViewModels {
         val newsRepo = (requireActivity().application as DailyScope).newsRepository
-        MainViewModelFactory(newsRepo)
+        val settingsRepo = (requireActivity().application as DailyScope).settingsRepository
+        MainViewModelFactory(newsRepo , settingsRepo )
     }
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -136,6 +134,8 @@ class HomeFragment : Fragment() {
     private fun setupRecyclerView() {
         newsAdapter = NewsListAdapter(::onItemClicked, ::onBookmarkClicked)
         binding.rvNews.apply {
+            setHasFixedSize(true)
+            itemAnimator = null
             adapter = newsAdapter
             setHasFixedSize(true)
         }

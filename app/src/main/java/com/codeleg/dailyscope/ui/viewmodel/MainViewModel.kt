@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(private val newsRepo: NewsRepository) : ViewModel() {
+class MainViewModel(private val newsRepo: NewsRepository , private val settingsRepo: SettingsRepository) : ViewModel() {
      val _filterState = MutableStateFlow(FilterState())
     val filterState = _filterState.asStateFlow()
     private val _isRefreshing = MutableStateFlow(false)

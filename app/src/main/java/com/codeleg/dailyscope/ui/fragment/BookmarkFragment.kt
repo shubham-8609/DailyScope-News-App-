@@ -28,7 +28,8 @@ import kotlin.getValue
 class BookmarkFragment : Fragment() {
     private val mainVM: MainViewModel by activityViewModels {
         val newsRepo = (requireActivity().application as DailyScope).newsRepository
-        MainViewModelFactory(newsRepo)
+        val settingsRepo = (requireActivity().application as DailyScope).settingsRepository
+        MainViewModelFactory(newsRepo , settingsRepo)
     }
     private var _binding: FragmentBookmarkBinding? = null
     private val binding get() = _binding!!

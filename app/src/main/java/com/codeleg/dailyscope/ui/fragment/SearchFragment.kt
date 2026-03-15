@@ -37,7 +37,8 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
     private val searchViewModel: SearchViewModel by viewModels {
         val newsRepo = (requireActivity().application as DailyScope).newsRepository
-        MainViewModelFactory(newsRepo)
+        val settingsRepo = (requireActivity().application as DailyScope).settingsRepository
+        MainViewModelFactory(newsRepo , settingsRepo)
     }
     private lateinit var searchAdapter: NewsListAdapter
     private var searchView: SearchView? = null

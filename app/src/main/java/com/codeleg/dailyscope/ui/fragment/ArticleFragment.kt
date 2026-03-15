@@ -40,7 +40,8 @@ class ArticleFragment : Fragment() {
     private val binding get() = _binding!!
     private val mainVM: MainViewModel by activityViewModels {
         val newsRepo = (requireActivity().application as DailyScope).newsRepository
-        MainViewModelFactory(newsRepo)
+        val settingsRepo = (requireActivity().application as DailyScope).settingsRepository
+        MainViewModelFactory(newsRepo, settingsRepo)
     }
 
     private lateinit var article: Article
