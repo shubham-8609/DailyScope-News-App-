@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +23,7 @@ import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -44,7 +46,7 @@ class BookmarkFragment : Fragment() {
                 mainVM.setBookmark(article)
                 Snackbar.make(binding.root , if (article.isBookmarked) "Added to bookmarks" else "Removed from bookmarks", Snackbar.LENGTH_SHORT).show()
             },
-            disableCache = mainVM.attachment
+            disableCache = mainVM.disableCache.value
         )
     }
     private lateinit var rvBookmarked: RecyclerView
@@ -92,7 +94,6 @@ class BookmarkFragment : Fragment() {
                return when(menuItem.itemId){
                     R.id.option_remove_all_bookmarks -> {
                         showRemoveAllBookmarksConfirmation()
-                        Snackbar.make(binding.root , "Cleared all bookmarks", Snackbar.LENGTH_SHORT).show()
                         true
                     }
                    else -> false
@@ -108,6 +109,7 @@ class BookmarkFragment : Fragment() {
             .setMessage("Are you sure you want to remove all items from bookmarks?")
             .setPositiveButton("Yes") { _, _ ->
                 mainVM.clearBookmarks()
+                Snackbar.make(binding.root , "Cleared all bookmarks", Snackbar.LENGTH_SHORT).show()
             }
             .setNegativeButton("No", null)
             .create()

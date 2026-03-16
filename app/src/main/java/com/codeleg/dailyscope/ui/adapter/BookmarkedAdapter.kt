@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.ListAdapter
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
 
-class BookmarkedAdapter(private val onItemClick: (Article) -> Unit,
-                        private val onBookmarkClick: (Article) -> Unit,
-                        private val disableCache: Boolean = false
+class BookmarkedAdapter(
+    private val onItemClick: (Article) -> Unit,
+    private val onBookmarkClick: (Article) -> Unit,
+    private var disableCache: Boolean = false
 ) : ListAdapter<Article, NewsListAdapter.NewsViewHolder>(NewsListAdapter.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsListAdapter.NewsViewHolder {
@@ -17,12 +18,12 @@ class BookmarkedAdapter(private val onItemClick: (Article) -> Unit,
             parent,
             false
         )
-        return NewsListAdapter.NewsViewHolder(binding, onBookmarkClick , disableCache)
+        return NewsListAdapter.NewsViewHolder(binding, onBookmarkClick)
     }
 
     override fun onBindViewHolder(holder: NewsListAdapter.NewsViewHolder, position: Int) {
         val article = getItem(position)
-        holder.bind(article)
+        holder.bind(article, disableCache)
 
         holder.itemView.setOnClickListener {
             onItemClick(article)

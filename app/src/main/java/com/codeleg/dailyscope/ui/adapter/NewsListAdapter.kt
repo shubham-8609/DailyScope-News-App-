@@ -12,8 +12,13 @@ import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
 
 
-class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val onBookmarkClick: (Article) -> Unit , private val disableCache:Boolean) :
+class NewsListAdapter(
+    private val onItemClick: (Article) -> Unit,
+    private val onBookmarkClick: (Article) -> Unit,
+    private var disableCache: Boolean
+) :
     PagingDataAdapter<Article, NewsListAdapter.NewsViewHolder>(DiffCallback) {
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -26,11 +31,11 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val on
             false
         )
 
-        return NewsViewHolder(binding , onBookmarkClick , disableCache)
+        return NewsViewHolder(binding , onBookmarkClick)
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), disableCache)
         holder.itemView.setOnClickListener {
             getItem(position)?.let { article ->
                 onItemClick(article)
@@ -40,11 +45,10 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val on
 
     class NewsViewHolder(
         private val binding: ItemArticleBinding,
-        private val onBookmarkClick: (Article) -> Unit,
-        private val disableCache: Boolean
+        private val onBookmarkClick: (Article) -> Unit
     ) : ViewHolder(binding.root) {
 
-        fun bind(article: Article?) {
+        fun bind(article: Article?, disableCache: Boolean) {
             Glide.with(binding.newsImage.context).clear(binding.newsImage)
             with(binding) {
                 article?.let {

@@ -9,7 +9,6 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.fragment.SearchFragment">
 
-    ```
     <!-- Suggestions Container -->
     <LinearLayout
         android:id="@+id/suggestionContainer"
@@ -110,6 +109,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-    ```
 
 </androidx.constraintlayout.widget.ConstraintLayout>

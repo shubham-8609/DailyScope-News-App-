@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -24,7 +25,9 @@ class SearchViewModel(private val newsRepository: NewsRepository , private val s
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
     val autoOpenSearch = settingsRepo.autoOpenSearch.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-    val disableCache = settingsRepo.attachmentFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false).value
+    val disableCache = settingsRepo.attachmentFlow
+        .map { attachmentEnabled -> !attachmentEnabled }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
 
     val searchResults: Flow<PagingData<Article>> = _query
         .debounce(300)

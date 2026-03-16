@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -30,7 +31,9 @@ class MainViewModel(private val newsRepo: NewsRepository , private val settingsR
     val darkMode = settingsRepo.darkModeFlow.stateIn(viewModelScope,  SharingStarted.WhileSubscribed(5000),
         false)
     val materialYou = settingsRepo.materialYouFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-    val attachment = settingsRepo.attachmentFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false).value
+    val disableCache = settingsRepo.attachmentFlow
+        .map { attachmentEnabled -> !attachmentEnabled }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
 
 
     val news = filterState
