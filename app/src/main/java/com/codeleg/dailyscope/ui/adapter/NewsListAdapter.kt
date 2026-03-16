@@ -12,7 +12,7 @@ import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
 
 
-class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val onBookmarkClick: (Article) -> Unit) :
+class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val onBookmarkClick: (Article) -> Unit , private val disableCache:Boolean) :
     PagingDataAdapter<Article, NewsListAdapter.NewsViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(
@@ -26,7 +26,7 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val on
             false
         )
 
-        return NewsViewHolder(binding , onBookmarkClick)
+        return NewsViewHolder(binding , onBookmarkClick , disableCache)
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
@@ -40,7 +40,8 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val on
 
     class NewsViewHolder(
         private val binding: ItemArticleBinding,
-        private val onBookmarkClick: (Article) -> Unit
+        private val onBookmarkClick: (Article) -> Unit,
+        private val disableCache: Boolean
     ) : ViewHolder(binding.root) {
 
         fun bind(article: Article?) {
@@ -59,7 +60,7 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val on
                         .load(article.image)
                         .centerCrop()
                         .override(500, 250)
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .diskCacheStrategy(if (disableCache) DiskCacheStrategy.NONE else DiskCacheStrategy.AUTOMATIC)
                         .placeholder(R.drawable.news_placeholder)
                         .error(R.drawable.image_unavailable)
                         .into(newsImage)

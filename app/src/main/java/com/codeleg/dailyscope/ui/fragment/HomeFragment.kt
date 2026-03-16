@@ -152,7 +152,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsListAdapter(::onItemClicked, ::onBookmarkClicked)
+        val disableCache = mainVM.attachment
+        newsAdapter = NewsListAdapter(::onItemClicked, ::onBookmarkClicked , disableCache)
         binding.rvNews.apply {
             setHasFixedSize(true)
             itemAnimator = null

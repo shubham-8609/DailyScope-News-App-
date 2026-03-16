@@ -79,6 +79,13 @@
             app:iconSpaceReserved="false">
 
             <SwitchPreferenceCompat
+                app:key="attachment"
+                app:title="Download Images"
+                android:summary="Download images for offline viewing (may increase data usage and cache)"
+                app:icon="@drawable/ic_image"
+                app:iconSpaceReserved="false" />
+
+            <SwitchPreferenceCompat
                 app:key="sync"
                 app:title="Auto Refresh News"
                 app:summary="Automatically fetch latest news in background"
@@ -86,14 +93,6 @@
                 app:enabled="false"
                 app:iconSpaceReserved="false" />
 
-            <SwitchPreferenceCompat
-                app:key="attachment"
-                app:title="Download Images"
-                app:summaryOn="Images will be downloaded for offline viewing"
-                app:summaryOff="Images will not be downloaded"
-                app:dependency="sync"
-                app:icon="@drawable/ic_image"
-                app:iconSpaceReserved="false" />
 
         </PreferenceCategory>
 

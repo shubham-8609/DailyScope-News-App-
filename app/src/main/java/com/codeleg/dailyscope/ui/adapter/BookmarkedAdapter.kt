@@ -7,7 +7,8 @@ import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
 
 class BookmarkedAdapter(private val onItemClick: (Article) -> Unit,
-                        private val onBookmarkClick: (Article) -> Unit
+                        private val onBookmarkClick: (Article) -> Unit,
+                        private val disableCache: Boolean = false
 ) : ListAdapter<Article, NewsListAdapter.NewsViewHolder>(NewsListAdapter.DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsListAdapter.NewsViewHolder {
@@ -16,7 +17,7 @@ class BookmarkedAdapter(private val onItemClick: (Article) -> Unit,
             parent,
             false
         )
-        return NewsListAdapter.NewsViewHolder(binding, onBookmarkClick)
+        return NewsListAdapter.NewsViewHolder(binding, onBookmarkClick , disableCache)
     }
 
     override fun onBindViewHolder(holder: NewsListAdapter.NewsViewHolder, position: Int) {

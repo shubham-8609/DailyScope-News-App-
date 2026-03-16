@@ -44,9 +44,9 @@
             android:layout_height="wrap_content"
             android:text="Technology"
             android:textSize="11sp"
-            android:textColor="?attr/colorOnSecondaryContainer"
+            android:textColor="@android:color/white"
             android:layout_margin="10dp"
-            app:chipBackgroundColor="?attr/colorSecondaryContainer"
+            android:backgroundTint="#66000000"
             app:chipCornerRadius="12dp"
             app:layout_constraintTop_toTopOf="@id/newsImage"
             app:layout_constraintStart_toStartOf="@id/newsImage"/>
@@ -61,7 +61,7 @@
             android:src="@drawable/icon_bookmark"
             app:layout_constraintTop_toTopOf="@id/newsImage"
             app:layout_constraintEnd_toEndOf="@id/newsImage"
-            app:tint="?attr/colorOnSurface" />
+       />
 
         <!-- Title -->
         <TextView

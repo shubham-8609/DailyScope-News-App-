@@ -24,6 +24,7 @@ class SearchViewModel(private val newsRepository: NewsRepository , private val s
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
     val autoOpenSearch = settingsRepo.autoOpenSearch.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    val disableCache = settingsRepo.attachmentFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false).value
 
     val searchResults: Flow<PagingData<Article>> = _query
         .debounce(300)

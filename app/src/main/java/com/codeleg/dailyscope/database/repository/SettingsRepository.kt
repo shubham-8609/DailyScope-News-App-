@@ -15,11 +15,13 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     private val DARK_MODE = booleanPreferencesKey("dark_mode")
     private val MATERIAL_YOU_ENABLE = booleanPreferencesKey("material_you_enable")
     private val AUTO_SPEAK = booleanPreferencesKey("auto_speak")
+    private val ATTACHMENT = booleanPreferencesKey("attachment")
     val headlinesOnlyFlow: Flow<Boolean> = dataStore.data.map { it[HEADLINES_ONLY] ?: false }
     val autoOpenSearch: Flow<Boolean> = dataStore.data.map { it[AUTO_OPEN_SEARCH] ?: false }
     val autoSpeak: Flow<Boolean> = dataStore.data.map { it[AUTO_SPEAK] ?: false }
     val darkModeFlow: Flow<Boolean> = dataStore.data.map { it[DARK_MODE] ?: false }
     val materialYouFlow: Flow<Boolean> = dataStore.data.map { it[MATERIAL_YOU_ENABLE] ?: false }
+    val attachmentFlow: Flow<Boolean> = dataStore.data.map { it[ATTACHMENT] ?: false }
 
 
 

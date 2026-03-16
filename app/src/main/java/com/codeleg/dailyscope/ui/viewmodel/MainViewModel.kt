@@ -30,6 +30,7 @@ class MainViewModel(private val newsRepo: NewsRepository , private val settingsR
     val darkMode = settingsRepo.darkModeFlow.stateIn(viewModelScope,  SharingStarted.WhileSubscribed(5000),
         false)
     val materialYou = settingsRepo.materialYouFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    val attachment = settingsRepo.attachmentFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false).value
 
 
     val news = filterState
