@@ -175,8 +175,13 @@ class SearchFragment : Fragment() {
         searchAdapter.addLoadStateListener { loadState ->
             val query = searchViewModel.query.value
             val isEmptyResult = loadState.refresh is LoadState.NotLoading && searchAdapter.itemCount == 0 && query.isNotBlank()
-            getString(R.string.search_no_results)
-
+            val shouldShowEmpty = query.isBlank() || isEmptyResult
+            binding.emptyState.isVisible = shouldShowEmpty
+            binding.emptyState.text = if (query.isBlank()) {
+                getString(R.string.search_empty_state)
+            } else {
+                getString(R.string.search_no_results)
+            }
         }
     }
 
