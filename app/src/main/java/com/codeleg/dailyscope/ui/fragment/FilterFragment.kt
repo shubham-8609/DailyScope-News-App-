@@ -78,6 +78,11 @@ class FilterFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             val categories = mainVM.getCategories()
+            if(categories.isEmpty()){
+                Toast.makeText(requireContext(), "No categories available. Refresh and try again.", Toast.LENGTH_SHORT).show()
+                dismiss()
+                return@launch
+            }
             categories.forEach { category ->
                 category?.let {
                     val chip = Chip(requireContext()).apply {

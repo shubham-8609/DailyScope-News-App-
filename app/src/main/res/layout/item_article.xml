@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@android:color/white"
             android:maxLines="2"
             android:ellipsize="end"
             android:paddingHorizontal="14dp"

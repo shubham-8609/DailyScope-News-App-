@@ -17,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.model.Article
@@ -67,6 +68,23 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainVM.isRefreshing.collect { isRefreshing ->
                     binding.swipeRefresh.isRefreshing = isRefreshing
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                newsAdapter.loadStateFlow.collectLatest { loadState ->
+                    val isListEmpty =
+                        loadState.refresh is LoadState.NotLoading && newsAdapter.itemCount == 0
+
+                    if (isListEmpty) {
+                        binding.rvNews.visibility = View.GONE
+                        binding.lottieNoData.visibility = View.VISIBLE
+                        binding.lottieNoData.playAnimation()
+                    } else {
+                        binding.lottieNoData.visibility = View.GONE
+                        binding.rvNews.visibility = View.VISIBLE
+                    }
                 }
             }
         }

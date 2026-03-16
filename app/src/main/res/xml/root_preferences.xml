@@ -44,13 +44,14 @@
             <SwitchPreferenceCompat
                 app:key="material_you_enable"
                 app:title="Material You Theme"
+                app:icon="@drawable/material_theme"
                 app:summary="Adapt app colors to match your device wallpaper." />
 
             <SwitchPreferenceCompat
                 app:key="dark_mode"
                 app:title="Dark Mode"
                 app:summary="Enable dark theme for better night reading"
-                app:icon="@drawable/rounded_dark_mode_24"
+                app:icon="@drawable/night_mode"
                 app:iconSpaceReserved="false" />
 
             <SwitchPreferenceCompat

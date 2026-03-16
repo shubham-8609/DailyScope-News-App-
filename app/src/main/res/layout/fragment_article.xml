@@ -94,7 +94,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:maxLines="3"
                     android:textIsSelectable="true"

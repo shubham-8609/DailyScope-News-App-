@@ -69,6 +69,12 @@ class BookmarkFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             mainVM.bookmarkedArticles.collect { articles ->
                 bookmarkedAdapter.submitList(articles)
+                if(articles.isEmpty()){
+                    rvBookmarked.visibility = View.GONE
+                } else {
+                    binding.noBookmarks.visibility = View.GONE
+                    rvBookmarked.visibility = View.VISIBLE
+                }
             }
         }
 
