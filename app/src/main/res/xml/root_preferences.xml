@@ -1,165 +1,180 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- ================= NEWS FETCH SETTINGS ================= -->
+        <!-- ================= NEWS FETCH SETTINGS ================= -->
 
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="News Fetch Settings">
+        <PreferenceCategory
+            app:title="News Fetch Settings"
+            app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
-            app:key="headlines_only"
-            app:title="Headlines Only"
-            app:summary="Fetch only headline articles for faster loading"
-            app:icon="@drawable/ic_headlines"
-            app:enabled="false" />
+            <SwitchPreferenceCompat
+                app:key="headlines_only"
+                app:title="Headlines Only"
+                app:summary="Fetch only headline articles for faster loading"
+                app:icon="@drawable/ic_headlines"
+                app:iconSpaceReserved="false"
+                app:enabled="false" />
 
-        <EditTextPreference
-            app:key="max_news_per_cluster"
-            app:title="Articles Per Cluster"
-            app:summary="Maximum number of articles fetched in each cluster"
-            app:defaultValue="1"
-            app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/ic_article" />
+            <EditTextPreference
+                app:key="max_news_per_cluster"
+                app:title="Articles Per Cluster"
+                app:summary="Maximum number of articles fetched in each cluster"
+                app:defaultValue="1"
+                app:useSimpleSummaryProvider="true"
+                app:icon="@drawable/ic_article"
+                app:iconSpaceReserved="false" />
 
-        <EditTextPreference
-            app:key="news_date"
-            app:title="Fetch News By Date"
-            app:summary="Format: YYYY-MM-DD (leave empty for today's news)"
-            app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/ic_calendar" />
+            <EditTextPreference
+                app:key="news_date"
+                app:title="Fetch News By Date"
+                app:summary="Format: YYYY-MM-DD (leave empty for today's news)"
+                app:useSimpleSummaryProvider="true"
+                app:icon="@drawable/ic_calendar"
+                app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="App Pereferences">
-
-        <SwitchPreferenceCompat
-            app:key="material_you_enable"
-            app:title="Material You Theme"
-            app:summary="Adapt app colors to match your device wallpaper."
-             />
-        <SwitchPreferenceCompat
-            app:key="dark_mode"
-            app:title="Dark Mode"
-            app:summary="Enable dark theme for better night reading"
-            app:icon="@drawable/rounded_dark_mode_24" />
-        <SwitchPreferenceCompat
-            app:key="auto_open_search"
-            app:title="Auto open search bar"
-            android:icon="@drawable/search_icon"
-            app:summary="Automatically focus and open the search bar when entering the search screen.   " />
-
-        <SwitchPreferenceCompat
-            app:key="auto_speak"
-            app:title="Auto Speak"
-            app:summary="Automatically read news articles aloud when opened. ⚠️ Unstable "
-            android:icon="@drawable/icon_speak"
-            app:enabled="false"
-            />
+        </PreferenceCategory>
 
 
+        <!-- ================= APP PREFERENCES ================= -->
+
+        <PreferenceCategory
+            app:title="App Preferences"
+            app:iconSpaceReserved="false">
+
+            <SwitchPreferenceCompat
+                app:key="material_you_enable"
+                app:title="Material You Theme"
+                app:summary="Adapt app colors to match your device wallpaper." />
+
+            <SwitchPreferenceCompat
+                app:key="dark_mode"
+                app:title="Dark Mode"
+                app:summary="Enable dark theme for better night reading"
+                app:icon="@drawable/rounded_dark_mode_24"
+                app:iconSpaceReserved="false" />
+
+            <SwitchPreferenceCompat
+                app:key="auto_open_search"
+                app:title="Auto open search bar"
+                app:summary="Automatically focus the search bar when opening the search screen"
+                app:icon="@drawable/search_icon"
+                app:iconSpaceReserved="false" />
+
+            <SwitchPreferenceCompat
+                app:key="auto_speak"
+                app:title="Auto Speak"
+                app:summary="Automatically read news articles aloud when opened ⚠️ Unstable"
+                app:icon="@drawable/icon_speak"
+                app:enabled="false"
+                app:iconSpaceReserved="false" />
+
+        </PreferenceCategory>
 
 
-    </PreferenceCategory>
+        <!-- ================= BACKGROUND SYNC ================= -->
+
+        <PreferenceCategory
+            app:title="Background Sync"
+            app:iconSpaceReserved="false">
+
+            <SwitchPreferenceCompat
+                app:key="sync"
+                app:title="Auto Refresh News"
+                app:summary="Automatically fetch latest news in background"
+                app:icon="@drawable/ic_sync"
+                app:enabled="false"
+                app:iconSpaceReserved="false" />
+
+            <SwitchPreferenceCompat
+                app:key="attachment"
+                app:title="Download Images"
+                app:summaryOn="Images will be downloaded for offline viewing"
+                app:summaryOff="Images will not be downloaded"
+                app:dependency="sync"
+                app:icon="@drawable/ic_image"
+                app:iconSpaceReserved="false" />
+
+        </PreferenceCategory>
 
 
-    <!-- ================= BACKGROUND SYNC ================= -->
+        <!-- ================= STORAGE ================= -->
 
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="Background Sync">
+        <PreferenceCategory
+            app:title="Storage and Cache"
+            app:iconSpaceReserved="false">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="Auto Refresh News"
-            app:summary="Automatically fetch latest news in background"
-            app:icon="@drawable/ic_sync"
-            app:enabled="false" />
+            <Preference
+                app:key="clear_cache"
+                app:title="Clear Cache"
+                app:summary="Calculating..."
+                app:icon="@drawable/ic_clear"
+                app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
-            app:key="attachment"
-            app:title="Download Images"
-            app:summaryOn="Images will be downloaded for offline viewing"
-            app:summaryOff="Images will not be downloaded"
-            app:dependency="sync"
-            app:icon="@drawable/ic_image" />
+            <Preference
+                app:key="delete_all_news"
+                app:title="Delete All News"
+                app:summary="Remove all stored news articles from the device"
+                app:icon="@drawable/ic_delete"
+                app:persistent="false"
+                app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
-
-
-    <!-- ================= STORAGE ================= -->
-
-    <PreferenceCategory
-        app:title="Storage and  Cache"
-        app:iconSpaceReserved="false">
-
-        <Preference
-            app:key="clear_cache"
-            app:title="Clear Cache"
-            app:summary="Calculating..."
-            app:icon="@drawable/ic_clear"
-            />
-
-        <Preference
-            app:key="delete_all_news"
-            app:title="Delete All News"
-            app:summary="Remove all stored news articles from the device"
-            app:icon="@drawable/ic_delete"
-            app:persistent="false" />
-
-    </PreferenceCategory>
+        </PreferenceCategory>
 
 
-    <!-- ================= ABOUT ================= -->
+        <!-- ================= ABOUT ================= -->
 
-    <PreferenceCategory
-        app:title="About DailyScope"
-        app:iconSpaceReserved="false">
+        <PreferenceCategory
+            app:title="About DailyScope"
+            app:iconSpaceReserved="false">
 
-        <Preference
-            app:key="app_description"
-            app:title="About App"
-            app:summary="DailyScope is a modern news reader built with Kotlin, MVVM, Room, and Retrofit. It aggregates global news and supports offline reading."
-            app:icon="@drawable/ic_info"
-            app:selectable="false" />
+            <Preference
+                app:key="app_description"
+                app:title="About App"
+                app:summary="DailyScope is a modern news reader built with Kotlin, MVVM, Room, and Retrofit. It aggregates global news and supports offline reading."
+                app:icon="@drawable/ic_info"
+                app:selectable="false"
+                app:iconSpaceReserved="false" />
 
-        <Preference
-            app:key="app_version"
-            app:title="App Version"
-            app:summary="1.0.0"
-            app:icon="@drawable/ic_android"
-            app:selectable="false" />
+            <Preference
+                app:key="app_version"
+                app:title="App Version"
+                app:summary="1.0.0"
+                app:icon="@drawable/ic_android"
+                app:selectable="false"
+                app:iconSpaceReserved="false" />
 
-        <Preference
-            app:key="developer_name"
-            app:title="Developer"
-            app:summary="Shubham"
-            app:icon="@drawable/ic_person"
-            app:selectable="false" />
+            <Preference
+                app:key="developer_name"
+                app:title="Developer"
+                app:summary="Shubham"
+                app:icon="@drawable/ic_person"
+                app:selectable="false"
+                app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+        </PreferenceCategory>
 
 
-    <!-- ================= SUPPORT ================= -->
+        <!-- ================= SUPPORT ================= -->
 
-    <PreferenceCategory
-        app:title="Support Links"
-        app:iconSpaceReserved="false">
+        <PreferenceCategory
+            app:title="Support Links"
+            app:iconSpaceReserved="false">
 
-        <Preference
-            app:key="github"
-            app:title="GitHub Repository"
-            app:summary="View project source code"
-            app:icon="@drawable/ic_github" />
+            <Preference
+                app:key="github"
+                app:title="GitHub Repository"
+                app:summary="View project source code"
+                app:icon="@drawable/ic_github"
+                app:iconSpaceReserved="false" />
 
-        <Preference
-            app:key="contact"
-            app:title="Contact Developer"
-            app:summary="Send feedback or report bugs"
-            app:icon="@drawable/ic_email" />
+            <Preference
+                app:key="contact"
+                app:title="Contact Developer"
+                app:summary="Send feedback or report bugs"
+                app:icon="@drawable/ic_email"
+                app:iconSpaceReserved="false" />
 
-    </PreferenceCategory>
+        </PreferenceCategory>
+
 
 </PreferenceScreen>

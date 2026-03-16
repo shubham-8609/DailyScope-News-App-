@@ -58,7 +58,7 @@ class NewsListAdapter(private val onItemClick: (Article) -> Unit, private val on
                     Glide.with(newsImage.context)
                         .load(article.image)
                         .centerCrop()
-                        .override(600, 325)
+                        .override(500, 250)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .placeholder(R.drawable.news_placeholder)
                         .error(R.drawable.image_unavailable)

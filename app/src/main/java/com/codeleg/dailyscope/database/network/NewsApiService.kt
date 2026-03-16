@@ -23,6 +23,8 @@ interface NewsApiService {
         suspend fun searchNews(
             @Query("text") query: String,
             @Query("offset") offset: Int,
+            @Query("sort") sortby: String? = "publish-time",
+            @Query("sort-direction") sortDirection: String? = "desc",
             @Query("number") pageSize: Int,
             @Query("language") language: String? = null
         ): SearchNewsResponse

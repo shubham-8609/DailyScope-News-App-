@@ -21,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
-import com.codeleg.dailyscope.utils.showWarningToast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -191,7 +190,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         lifecycleScope.launch {
             mainVM.clearNewsDB()
-            requireActivity().showWarningToast(requireActivity() , "All news articles have been deleted.")
+            Toast.makeText(requireContext(), "All news articles have been deleted.", Toast.LENGTH_SHORT).show()
 
         }
     }
@@ -199,7 +198,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun deleteCachedImages() {
         lifecycleScope.launch {
             mainVM.clearCachedImages(requireContext())
-            requireActivity().showWarningToast(requireActivity() , "Cached images have been cleared.")
+            Toast.makeText(requireContext(), "Cached images have been cleared.", Toast.LENGTH_SHORT).show()
             showStorageInfo()
         }
     }

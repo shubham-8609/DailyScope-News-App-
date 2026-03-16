@@ -81,7 +81,6 @@ dependencies {
 
     /* -------------------- UI Utils -------------------- */
     implementation("com.intuit.sdp:sdp-android:1.1.1")
-    implementation("com.intuit.ssp:ssp-android:1.1.1")
 
     /* -------------------- Room -------------------- */
     implementation("androidx.room:room-runtime:2.8.4")
@@ -96,7 +95,6 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
     implementation("com.facebook.shimmer:shimmer:0.5.0")
-    implementation("com.github.Spikeysanju:MotionToast:1.4")
 
     /* -------------------- Testing -------------------- */
     testImplementation(libs.junit)

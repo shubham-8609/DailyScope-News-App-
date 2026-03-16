@@ -133,7 +133,7 @@ class SearchFragment : Fragment() {
 
                     setOnCloseListener {
                         searchViewModel.clearQuery()
-                        binding.suggestionContainer.visibility = View.VISIBLE
+                        binding.suggestionContainer.visibility = View.GONE
                         true
                     }
 
