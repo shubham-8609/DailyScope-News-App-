@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.io.File
 
 class SettingsRepository(private val dataStore: DataStore<Preferences>) {
@@ -16,12 +17,19 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     private val MATERIAL_YOU_ENABLE = booleanPreferencesKey("material_you_enable")
     private val AUTO_SPEAK = booleanPreferencesKey("auto_speak")
     private val ATTACHMENT = booleanPreferencesKey("attachment")
+    private val NOTIFICATION_ALLOWED = booleanPreferencesKey("notifications_enabled")
     val headlinesOnlyFlow: Flow<Boolean> = dataStore.data.map { it[HEADLINES_ONLY] ?: false }
     val autoOpenSearch: Flow<Boolean> = dataStore.data.map { it[AUTO_OPEN_SEARCH] ?: false }
     val autoSpeak: Flow<Boolean> = dataStore.data.map { it[AUTO_SPEAK] ?: false }
     val darkModeFlow: Flow<Boolean> = dataStore.data.map { it[DARK_MODE] ?: false }
     val materialYouFlow: Flow<Boolean> = dataStore.data.map { it[MATERIAL_YOU_ENABLE] ?: false }
     val attachmentFlow: Flow<Boolean> = dataStore.data.map { it[ATTACHMENT] ?: false }
+    val notificationAllowedFlow: Flow<Boolean> = dataStore.data.map { it[NOTIFICATION_ALLOWED] ?: false }
+    suspend fun setNotificationAllowed(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[NOTIFICATION_ALLOWED] = enabled
+        }
+    }
 
 
 

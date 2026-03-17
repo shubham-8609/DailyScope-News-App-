@@ -2,6 +2,7 @@ package com.codeleg.dailyscope.ui.viewmodel
 
 
 import android.content.Context
+import android.os.Build
 import com.codeleg.dailyscope.database.model.Article
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,10 +12,13 @@ import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.database.repository.SettingsRepository
 import com.codeleg.dailyscope.utils.FilterState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -34,6 +38,10 @@ class MainViewModel(private val newsRepo: NewsRepository , private val settingsR
     val disableCache = settingsRepo.attachmentFlow
         .map { attachmentEnabled -> !attachmentEnabled }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
+    val notificationAllowed = settingsRepo.notificationAllowedFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    private val _requestNotificationPermission = MutableSharedFlow<Unit>( extraBufferCapacity = 1)
+    val requestNotificationPermission = _requestNotificationPermission.asSharedFlow()
 
 
     val news = filterState
@@ -84,6 +92,21 @@ class MainViewModel(private val newsRepo: NewsRepository , private val settingsR
     fun clearBookmarks() {
         viewModelScope.launch {
             newsRepo.clearBookmarks()
+        }
+    }
+    fun onNotificationPreferenceChanged(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepo.setNotificationAllowed(enabled)
+
+            if (enabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                _requestNotificationPermission.emit(Unit)
+            }
+        }
+    }
+
+    fun setNotificationAllowed(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepo.setNotificationAllowed(enabled)
         }
     }
 

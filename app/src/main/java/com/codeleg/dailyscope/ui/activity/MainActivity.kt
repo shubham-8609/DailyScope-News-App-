@@ -1,11 +1,17 @@
 package com.codeleg.dailyscope.ui.activity
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +24,8 @@ import com.codeleg.dailyscope.databinding.ActivityMainBinding
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
 import com.google.android.material.color.DynamicColors
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -27,6 +35,16 @@ class MainActivity : AppCompatActivity() {
         val newsRepo = (application as DailyScope).newsRepository
         val settingsRepo = (application as DailyScope).settingsRepository
         MainViewModelFactory(newsRepo, settingsRepo)
+    }
+    private val notificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted ->
+        if(granted){
+            Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
+            mainVM.setNotificationAllowed(true)
+        } else {
+            Toast.makeText(this, "Notification permission denied. You can enable it later in settings.", Toast.LENGTH_SHORT).show()
+           mainVM.setNotificationAllowed(false)
+//
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,7 +114,24 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        lifecycleScope.launch {
+            mainVM.requestNotificationPermission.collect {
+                notificationPermissionLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+        }
+    }
 
+    fun hasNotificationPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
     }
 
 

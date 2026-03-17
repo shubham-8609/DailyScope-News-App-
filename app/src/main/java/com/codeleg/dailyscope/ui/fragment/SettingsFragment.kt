@@ -18,6 +18,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.SwitchPreferenceCompat
 import com.codeleg.dailyscope.DailyScope
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
@@ -59,7 +60,18 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
        showStorageInfo()
-
+        findPreference<SwitchPreferenceCompat>("notifications_enabled")?.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue as Boolean) {
+                mainVM.onNotificationPreferenceChanged(true)
+                false
+            }else{
+                mainVM.setNotificationAllowed(false)
+                true
+            }
+        }
+        lifecycleScope.launch{
+            mainVM.notificationAllowed.collect { findPreference<SwitchPreferenceCompat>("notifications_enabled")?.isChecked = it }
+        }
     }
 
     private fun showStorageInfo() {
