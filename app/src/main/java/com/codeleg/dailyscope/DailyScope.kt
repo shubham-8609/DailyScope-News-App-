@@ -6,6 +6,9 @@ import com.codeleg.dailyscope.database.network.RetrofitInstance
 import com.codeleg.dailyscope.database.preference.settingsDataStore
 import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.database.repository.SettingsRepository
+import com.codeleg.dailyscope.utils.NotificationChannel
+import com.codeleg.dailyscope.worker.BackgroundSyncManager
+
 
 class DailyScope : Application() {
 
@@ -14,7 +17,7 @@ class DailyScope : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
+        NotificationChannel.create(this)
         val newsDao = NewsDB.getDatabase(this).newsDao()
 
         settingsRepository = SettingsRepository(settingsDataStore)
@@ -24,5 +27,6 @@ class DailyScope : Application() {
             newsDao,
             settingsRepository
         )
+        BackgroundSyncManager(this , settingsRepository).start()
     }
 }
