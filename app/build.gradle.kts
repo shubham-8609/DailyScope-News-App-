@@ -79,6 +79,9 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation("androidx.datastore:datastore-preferences:1.2.0")
 
+    /* -------------------- WorkManager -------------------- */
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
     /* -------------------- UI Utils -------------------- */
     implementation("com.intuit.sdp:sdp-android:1.1.1")
 

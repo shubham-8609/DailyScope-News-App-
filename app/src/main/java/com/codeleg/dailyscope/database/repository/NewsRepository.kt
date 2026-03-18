@@ -43,8 +43,8 @@ class NewsRepository(
         country: String = "in",
         language: String = "en",
         headlinesOnly: Boolean
-    ): Boolean  {
-        return try {
+    ): Int  {
+         try {
             Log.d("codeleg", "Refreshing news from API...")
             val response = newsApi.getLatestNews(
                 country = country ,
@@ -65,10 +65,10 @@ class NewsRepository(
                 }
             )
             Log.d("codeleg", "Inserted ${articles.size} articles into DB")
-            true
+            return articles.size
         } catch (e: Exception) {
             Log.e("codeleg", "Error refreshing news: ${e.localizedMessage}", e)
-            false
+             return -1
         }
     }
 
