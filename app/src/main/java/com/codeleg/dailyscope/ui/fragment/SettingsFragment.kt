@@ -66,6 +66,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 false
             }else{
                 mainVM.setNotificationAllowed(false)
+                 findPreference<SwitchPreferenceCompat>("fetched_news_notification")?.isChecked = false
                 true
             }
         }

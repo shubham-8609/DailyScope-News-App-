@@ -18,6 +18,8 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     private val AUTO_SPEAK = booleanPreferencesKey("auto_speak")
     private val ATTACHMENT = booleanPreferencesKey("attachment")
     private val NOTIFICATION_ALLOWED = booleanPreferencesKey("notifications_enabled")
+    private val FETCHED_NEWS_NOTIFICATION = booleanPreferencesKey("fetched_news_notification")
+    private val BACKGROUND_SYNC = booleanPreferencesKey("background_fetch")
     val headlinesOnlyFlow: Flow<Boolean> = dataStore.data.map { it[HEADLINES_ONLY] ?: false }
     val autoOpenSearch: Flow<Boolean> = dataStore.data.map { it[AUTO_OPEN_SEARCH] ?: false }
     val autoSpeak: Flow<Boolean> = dataStore.data.map { it[AUTO_SPEAK] ?: false }
@@ -25,6 +27,10 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     val materialYouFlow: Flow<Boolean> = dataStore.data.map { it[MATERIAL_YOU_ENABLE] ?: false }
     val attachmentFlow: Flow<Boolean> = dataStore.data.map { it[ATTACHMENT] ?: false }
     val notificationAllowedFlow: Flow<Boolean> = dataStore.data.map { it[NOTIFICATION_ALLOWED] ?: false }
+    val fetchedNewsNotificationFlow: Flow<Boolean> = dataStore.data.map { it[FETCHED_NEWS_NOTIFICATION] ?: false }
+    val backgroundSyncFlow : Flow<Boolean> = dataStore.data.map{ it[BACKGROUND_SYNC] ?: false }
+
+
     suspend fun setNotificationAllowed(enabled: Boolean) {
         dataStore.edit { prefs ->
             prefs[NOTIFICATION_ALLOWED] = enabled
@@ -68,6 +74,17 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
             mb >= 1 -> String.format("%.2f MB", mb)
             kb >= 1 -> String.format("%.2f KB", kb)
             else -> "$size B"
+        }
+    }
+
+    fun hasNotificationPermission(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
         }
     }
 }

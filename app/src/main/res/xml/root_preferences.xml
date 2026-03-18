@@ -1,4 +1,4 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+ <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- ================= NEWS CONTENT ================= -->
@@ -35,7 +35,7 @@
     </PreferenceCategory>
 
 
-    <!-- ================= READING EXPERIENCE ================= -->
+    <!-- ================= APP BEHAVIOR  ================= -->
 
     <PreferenceCategory
         app:title="App Behavior"
@@ -117,14 +117,14 @@
             app:title="Download Images"
             android:summary="Download images for offline viewing (may increase data usage)"
             app:icon="@drawable/ic_image"
+            app:defaultValue="true"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
-            app:key="sync"
+            app:key="background_fetch"
             app:title="Auto Refresh News"
             app:summary="Automatically fetch latest news in the background"
             app:icon="@drawable/ic_sync"
-            app:enabled="false"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
