@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.File
 
@@ -23,6 +24,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     private val NOTIFICATION_ALLOWED = booleanPreferencesKey("notifications_enabled")
     private val FETCHED_NEWS_NOTIFICATION = booleanPreferencesKey("fetched_news_notification")
     private val BACKGROUND_SYNC = booleanPreferencesKey("background_fetch")
+    private val IS_GOOD_NEWS = booleanPreferencesKey("is_good_news")
     val headlinesOnlyFlow: Flow<Boolean> = dataStore.data.map { it[HEADLINES_ONLY] ?: false }
     val autoOpenSearch: Flow<Boolean> = dataStore.data.map { it[AUTO_OPEN_SEARCH] ?: false }
     val autoSpeak: Flow<Boolean> = dataStore.data.map { it[AUTO_SPEAK] ?: false }
@@ -32,6 +34,17 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     val notificationAllowedFlow: Flow<Boolean> = dataStore.data.map { it[NOTIFICATION_ALLOWED] ?: false }
     val fetchedNewsNotificationFlow: Flow<Boolean> = dataStore.data.map { it[FETCHED_NEWS_NOTIFICATION] ?: false }
     val backgroundSyncFlow : Flow<Boolean> = dataStore.data.map{ it[BACKGROUND_SYNC] ?: false }
+//    val isGoodNewsFlow : Flow<Boolean> = dataStore.data.map { it[IS_GOOD_NEWS] ?: false }
+
+    suspend fun isGoodNews(): Boolean {
+        return dataStore.data.first()[IS_GOOD_NEWS] ?: false
+    }
+
+    suspend fun setGoodNews(value : Boolean) {
+        dataStore.edit { prefs ->
+            prefs[IS_GOOD_NEWS] = value
+        }
+    }
 
 
     suspend fun setNotificationAllowed(enabled: Boolean) {

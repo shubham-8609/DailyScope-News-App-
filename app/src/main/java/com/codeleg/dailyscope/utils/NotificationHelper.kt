@@ -9,8 +9,11 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.os.bundleOf
+import androidx.navigation.NavDeepLinkBuilder
 import com.bumptech.glide.Glide
 import com.codeleg.dailyscope.R
+import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.ui.activity.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,26 +21,15 @@ import kotlinx.coroutines.withContext
 object NotificationHelper {
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    fun showBreakingNews(context: Context, title:String, content:String){
-
-        val notification = NotificationCompat.Builder(context , NotificationChannel.BREAKING_NEWS).apply {
-            setSmallIcon(R.drawable.app_icon_monochrome)
-            setContentTitle(title)
-            setContentText(content)
-            setPriority(NotificationCompat.PRIORITY_HIGH)
-            setAutoCancel(true)
-        }.build()
-        NotificationManagerCompat.from(context).notify(System.currentTimeMillis().toInt() , notification)
-    }
-
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    suspend  fun showImageNotification(context: Context, title: String, content:String, imageUrl:String){
+    suspend  fun showBreakingNews(context: Context, title: String, content:String, imageUrl:String , article: Article){
 
         val bitmap = withContext(Dispatchers.IO){
             try{
                 Glide.with(context)
                     .asBitmap()
                     .load(imageUrl)
+                    .error(R.drawable.image_unavailable)
+                    .override(600, 400)
                     .submit()
                     .get()
             }catch (e: Exception){
@@ -47,10 +39,16 @@ object NotificationHelper {
             }
         }
 
+        val pendingIntent = NavDeepLinkBuilder(context).setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.articleFragment)
+            .setArguments(bundleOf("article" to article))
+            .createPendingIntent()
+
         val notification = NotificationCompat.Builder(context , NotificationChannel.BREAKING_NEWS).apply {
             setSmallIcon(R.drawable.app_icon_monochrome)
             setContentTitle(title)
             setContentText(content)
+            setContentIntent(pendingIntent)
             setStyle(if(bitmap != null) NotificationCompat.BigPictureStyle().bigPicture(bitmap).bigLargeIcon(null as Bitmap?) else NotificationCompat.BigTextStyle().bigText(content) )
             setPriority(NotificationCompat.PRIORITY_DEFAULT)
             setAutoCancel(true)
