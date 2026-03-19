@@ -2,7 +2,6 @@ package com.codeleg.dailyscope.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.codeleg.dailyscope.DailyScope
-import com.codeleg.dailyscope.R
-import com.codeleg.dailyscope.database.network.RetrofitInstance
-import com.codeleg.dailyscope.database.repository.NewsRepository
 import com.codeleg.dailyscope.databinding.FragmentFilterBinding
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModel
 import com.codeleg.dailyscope.ui.viewmodel.MainViewModelFactory
@@ -21,7 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar

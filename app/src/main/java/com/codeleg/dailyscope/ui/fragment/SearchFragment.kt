@@ -126,7 +126,6 @@ class SearchFragment : Fragment() {
                         }
 
                         override fun onQueryTextChange(newText: String?): Boolean {
-
                             return true
                         }
                     })
@@ -217,10 +216,7 @@ class SearchFragment : Fragment() {
         Snackbar.make(binding.root, if (article.isBookmarked) "Added to bookmarks" else "Removed from bookmarks", Snackbar.LENGTH_SHORT).show()
     }
 
-    private fun showKeyboard(targetView: View) {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        targetView.post { imm.showSoftInput(targetView, InputMethodManager.SHOW_IMPLICIT) }
-    }
+
 
     private fun hideKeyboard(targetView: View) {
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -16,7 +16,6 @@ data class ArticleEntity(
     val summary: String?,
     @PrimaryKey(autoGenerate = false)
     val url: String,
-//    var isNotified:Boolean = false,
     val isBookmarked: Boolean = false,
     val image: String?,
     val video: String?,

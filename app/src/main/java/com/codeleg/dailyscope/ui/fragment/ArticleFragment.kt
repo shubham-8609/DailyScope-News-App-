@@ -13,14 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.FragmentArticleBinding
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -113,7 +111,6 @@ class ArticleFragment : Fragment() {
 
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-        observeAutoSpeak()
 
     }
 
@@ -198,17 +195,4 @@ class ArticleFragment : Fragment() {
         textToSpeech.shutdown()
     }
 
-    private fun observeAutoSpeak() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainVM.autoSpeak.collectLatest { enabled ->
-                    if (enabled ) {
-                        speakArticle()
-                    } else {
-                        stopSpeaking()
-                    }
-                }
-            }
-        }
-    }
 }

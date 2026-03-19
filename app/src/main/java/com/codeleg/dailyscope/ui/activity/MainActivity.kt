@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Notification permission denied. You can enable it later in settings.", Toast.LENGTH_SHORT).show()
            mainVM.setNotificationAllowed(false)
-//
         }
     }
 

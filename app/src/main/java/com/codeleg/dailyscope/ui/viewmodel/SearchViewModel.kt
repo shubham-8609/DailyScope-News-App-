@@ -30,8 +30,6 @@ class SearchViewModel(private val newsRepository: NewsRepository , private val s
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
 
     val searchResults: Flow<PagingData<Article>> = _query
-        .debounce(300)
-        .distinctUntilChanged()
         .flatMapLatest { term ->
             val trimmed = term.trim()
             if (trimmed.isEmpty()) {

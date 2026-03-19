@@ -53,7 +53,6 @@
             app:title="Auto Speak"
             app:summary="Automatically read articles aloud when opened ⚠️ Unstable"
             app:icon="@drawable/icon_speak"
-            app:enabled="false"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

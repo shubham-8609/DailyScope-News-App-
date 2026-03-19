@@ -38,7 +38,7 @@ class BackgroundSyncManager(
 
         if (enabled) {
             val request = PeriodicWorkRequestBuilder<NewsSyncWorker>(
-                10, TimeUnit.HOURS
+                8, TimeUnit.HOURS
             ).setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()).build()
             workManager.enqueueUniquePeriodicWork(
                 "news_sync",

@@ -182,7 +182,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    true // allow change
+                    true
                 }
         }
     }
