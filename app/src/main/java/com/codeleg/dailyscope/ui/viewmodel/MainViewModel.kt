@@ -34,9 +34,6 @@ class MainViewModel(private val newsRepo: NewsRepository , private val settingsR
     val darkMode = settingsRepo.darkModeFlow.stateIn(viewModelScope,  SharingStarted.WhileSubscribed(5000),
         false)
     val materialYou = settingsRepo.materialYouFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
-    val disableCache = settingsRepo.attachmentFlow
-        .map { attachmentEnabled -> !attachmentEnabled }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
     val notificationAllowed = settingsRepo.notificationAllowedFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
     private val _requestNotificationPermission = MutableSharedFlow<Unit>( extraBufferCapacity = 1)

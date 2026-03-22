@@ -44,7 +44,6 @@ class BookmarkFragment : Fragment() {
                 mainVM.setBookmark(article)
                 Snackbar.make(binding.root , if (article.isBookmarked) "Added to bookmarks" else "Removed from bookmarks", Snackbar.LENGTH_SHORT).show()
             },
-            disableCache = mainVM.disableCache.value
         )
     }
     private lateinit var rvBookmarked: RecyclerView

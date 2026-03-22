@@ -6,7 +6,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.model.Article
 import com.codeleg.dailyscope.databinding.ItemArticleBinding
@@ -15,7 +14,6 @@ import com.codeleg.dailyscope.databinding.ItemArticleBinding
 class NewsListAdapter(
     private val onItemClick: (Article) -> Unit,
     private val onBookmarkClick: (Article) -> Unit,
-    private var disableCache: Boolean
 ) :
     PagingDataAdapter<Article, NewsListAdapter.NewsViewHolder>(DiffCallback) {
 
@@ -35,7 +33,7 @@ class NewsListAdapter(
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(getItem(position), disableCache)
+        holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
             getItem(position)?.let { article ->
                 onItemClick(article)
@@ -48,7 +46,7 @@ class NewsListAdapter(
         private val onBookmarkClick: (Article) -> Unit
     ) : ViewHolder(binding.root) {
 
-        fun bind(article: Article?, disableCache: Boolean) {
+        fun bind(article: Article?) {
             Glide.with(binding.newsImage.context).clear(binding.newsImage)
             with(binding) {
                 article?.let {
@@ -64,7 +62,6 @@ class NewsListAdapter(
                         .load(article.image)
                         .centerCrop()
                         .override(500, 250)
-                        .diskCacheStrategy(if (disableCache) DiskCacheStrategy.NONE else DiskCacheStrategy.AUTOMATIC)
                         .placeholder(R.drawable.news_placeholder)
                         .error(R.drawable.image_unavailable)
                         .into(newsImage)

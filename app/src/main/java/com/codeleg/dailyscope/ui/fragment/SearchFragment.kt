@@ -89,7 +89,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        searchAdapter = NewsListAdapter(::onArticleClicked, ::onBookmarkClicked , disableCache = searchViewModel.disableCache.value)
+        searchAdapter = NewsListAdapter(::onArticleClicked, ::onBookmarkClicked)
         binding.rvSearchResults.adapter = searchAdapter
         binding.rvSearchResults.setHasFixedSize(true)
     }
