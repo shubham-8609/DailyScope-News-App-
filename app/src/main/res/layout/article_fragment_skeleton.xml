@@ -29,19 +29,6 @@
             android:paddingTop="16dp"
             android:background="?attr/colorSurfaceContainer">
 
-            <!-- Category -->
-            <View
-                android:layout_width="80dp"
-                android:layout_height="20dp"
-                android:background="@drawable/shimmer_placeholder"
-                android:layout_marginBottom="12dp"/>
-
-            <!-- Title Line 1 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="@drawable/shimmer_placeholder"
-                android:layout_marginBottom="8dp"/>
 
             <!-- Title Line 2 -->
             <View
@@ -102,8 +89,30 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:background="@drawable/shimmer_placeholder"
+                android:layout_marginBottom="8dp"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:background="@drawable/shimmer_placeholder"
+                android:layout_marginBottom="8dp"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:background="@drawable/shimmer_placeholder"
+                android:layout_marginBottom="8dp"/>
+
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
                 android:layout_marginRight="@dimen/_50sdp"
-                android:background="@drawable/shimmer_placeholder"/>
+                android:background="@drawable/shimmer_placeholder" />
 
             <Space
                 android:layout_width="match_parent"
