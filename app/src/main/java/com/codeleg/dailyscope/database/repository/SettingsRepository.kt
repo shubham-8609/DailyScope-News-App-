@@ -23,6 +23,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     private val ATTACHMENT = booleanPreferencesKey("attachment")
     private val NOTIFICATION_ALLOWED = booleanPreferencesKey("notifications_enabled")
     private val FETCHED_NEWS_NOTIFICATION = booleanPreferencesKey("fetched_news_notification")
+    private val BREAKING_NEWS_NOTIFICATION = booleanPreferencesKey("breaking_news_notification")
     private val BACKGROUND_SYNC = booleanPreferencesKey("background_fetch")
     private val IS_GOOD_NEWS = booleanPreferencesKey("is_good_news")
     val headlinesOnlyFlow: Flow<Boolean> = dataStore.data.map { it[HEADLINES_ONLY] ?: false }
@@ -33,6 +34,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     val attachmentFlow: Flow<Boolean> = dataStore.data.map { it[ATTACHMENT] ?: false }
     val notificationAllowedFlow: Flow<Boolean> = dataStore.data.map { it[NOTIFICATION_ALLOWED] ?: false }
     val fetchedNewsNotificationFlow: Flow<Boolean> = dataStore.data.map { it[FETCHED_NEWS_NOTIFICATION] ?: false }
+    val breakingNewsNotificationFlow: Flow<Boolean> = dataStore.data.map { it[BREAKING_NEWS_NOTIFICATION] ?: true }
     val backgroundSyncFlow : Flow<Boolean> = dataStore.data.map{ it[BACKGROUND_SYNC] ?: false }
 //    val isGoodNewsFlow : Flow<Boolean> = dataStore.data.map { it[IS_GOOD_NEWS] ?: false }
 
@@ -50,6 +52,12 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     suspend fun setNotificationAllowed(enabled: Boolean) {
         dataStore.edit { prefs ->
             prefs[NOTIFICATION_ALLOWED] = enabled
+        }
+    }
+
+    suspend fun setBreakingNewsNotification(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[BREAKING_NEWS_NOTIFICATION] = enabled
         }
     }
 

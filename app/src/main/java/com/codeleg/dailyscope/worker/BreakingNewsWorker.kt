@@ -7,6 +7,7 @@ import androidx.annotation.RequiresPermission
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.codeleg.dailyscope.DailyScope
+import com.codeleg.dailyscope.database.local.toEntity
 import com.codeleg.dailyscope.utils.NotificationHelper
 import kotlinx.coroutines.flow.first
 
@@ -19,6 +20,11 @@ class BreakingNewsWorker(private val context: Context, workerParams: WorkerParam
             val newsRepo = (context.applicationContext as DailyScope).newsRepository
             val settingsRepo = (context.applicationContext as DailyScope).settingsRepository
 
+            if (!settingsRepo.breakingNewsNotificationFlow.first()) {
+                Log.d("codeleg", "Breaking news notifications disabled. Skipping work. --BreakingNewsWorker")
+                return Result.success()
+            }
+
             if (settingsRepo.hasNotificationPermission(context)) {
                 val isGood = settingsRepo.isGoodNews()
                 val news = if (isGood) {
@@ -27,7 +33,12 @@ class BreakingNewsWorker(private val context: Context, workerParams: WorkerParam
                     newsRepo.getBadNews().ifEmpty { newsRepo.getGoodNews() }
                 }
                 if (news.isNotEmpty()) {
-                    val article = news.random()
+                    val notifiedIds = newsRepo.getNotifiedArticles().map { it.id }.toSet()
+                    val pool = news.filterNot { notifiedIds.contains(it.id) }
+                    if (pool.isEmpty()) return Result.success() // nothing new to notify
+                    val article = pool.random()
+                    newsRepo.updateArticles(article.toEntity().copy(isNotified = true))
+
                     Log.d(
                         "codeleg",
                         if (isGood) "Good news found sending notification " else "Bad news found sending notification "

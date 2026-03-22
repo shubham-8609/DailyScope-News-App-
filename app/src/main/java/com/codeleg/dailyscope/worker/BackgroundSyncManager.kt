@@ -30,8 +30,14 @@ class BackgroundSyncManager(
                     handleBackgroundSync(enabled)
                 }
         }
-            Log.d("codeleg" , "Starting BreakingNewsWorker -- BackgroundSyncManager")
-            startBreakingNewsWorker()
+        CoroutineScope(Dispatchers.IO).launch {
+            settingsRepo.breakingNewsNotificationFlow
+                .distinctUntilChanged()
+                .collect { enabled ->
+                    Log.d("codeleg", "Collected breakingNewsNotificationFlow value: $enabled -- BackgroundSyncManager")
+                    handleBreakingNewsSync(enabled)
+                }
+        }
     }
 
     private fun handleBackgroundSync(enabled: Boolean) {
@@ -51,16 +57,21 @@ class BackgroundSyncManager(
         }
     }
 
-    fun startBreakingNewsWorker() {
-        val request = PeriodicWorkRequestBuilder<BreakingNewsWorker>(
-            3, TimeUnit.HOURS
-        ).build()
+    private fun handleBreakingNewsSync(enabled: Boolean) {
+        if (enabled) {
+            val request = PeriodicWorkRequestBuilder<BreakingNewsWorker>(
+                3, TimeUnit.HOURS
+            ).build()
 
-        workManager.enqueueUniquePeriodicWork(
-            "breaking_news_sync",
-            ExistingPeriodicWorkPolicy.KEEP,
-            request
-        )
-        Log.d("codeleg", "Enqueued BreakingNewsWorker to run every 16 minutes. -- BackgroundSyncManager")
+            workManager.enqueueUniquePeriodicWork(
+                "breaking_news_sync",
+                ExistingPeriodicWorkPolicy.KEEP,
+                request
+            )
+            Log.d("codeleg", "Enqueued BreakingNewsWorker with breaking news alerts enabled. -- BackgroundSyncManager")
+        } else {
+            workManager.cancelUniqueWork("breaking_news_sync")
+            Log.d("codeleg", "Cancelled BreakingNewsWorker because breaking news alerts disabled. -- BackgroundSyncManager")
+        }
     }
 }

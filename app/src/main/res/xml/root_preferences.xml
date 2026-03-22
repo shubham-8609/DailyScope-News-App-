@@ -105,6 +105,15 @@
             app:dependency="notifications_enabled"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreferenceCompat
+            app:key="breaking_news_notification"
+            app:title="Breaking News Notifications"
+            app:summary="Get alerts for the latest breaking news"
+            app:icon="@drawable/outline_notifications_24"
+            app:dependency="notifications_enabled"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
 
