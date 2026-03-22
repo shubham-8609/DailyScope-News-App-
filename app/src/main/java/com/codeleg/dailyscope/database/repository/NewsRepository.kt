@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.codeleg.dailyscope.database.local.ArticleEntity
 import com.codeleg.dailyscope.database.local.NewsDao
 import com.codeleg.dailyscope.database.local.toArticle
 import com.codeleg.dailyscope.database.local.toEntity
@@ -118,6 +119,9 @@ class NewsRepository(
 
     suspend fun getBadNews() = newsDao.getBadNews().map { it.toArticle() }
 
+    suspend fun  getNotifiedArticles() = newsDao.getNotifiedArticles()
+
+    suspend fun updateArticles(article: ArticleEntity) = newsDao.updateArticles(article)
 
     suspend fun setBookmarkState(article: Article) = withContext(Dispatchers.IO) {
         newsDao.insertArticles(listOf(article.toEntity()))

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -64,6 +65,10 @@ ORDER BY publishDate DESC
     @Query("SELECT * FROM articles  WHERE sentiment <= -0.7 ORDER BY publishDate DESC")
     suspend fun getBadNews(): List<ArticleEntity>
 
+    @Query("SELECT * FROM articles WHERE isNotified = 1 ORDER BY publishDate DESC")
+    suspend fun getNotifiedArticles(): List<ArticleEntity>
 
+    @Update
+    suspend fun updateArticles(article : ArticleEntity)
 
 }
