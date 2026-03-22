@@ -4,6 +4,7 @@ import com.codeleg.dailyscope.database.model.SearchNewsResponse
 import com.codeleg.dailyscope.database.model.TopNewsResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
+import javax.inject.Inject
 
 interface NewsApiService {
 

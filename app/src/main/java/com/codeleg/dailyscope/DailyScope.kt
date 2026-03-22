@@ -1,6 +1,7 @@
 package com.codeleg.dailyscope
 
 import android.app.Application
+import com.codeleg.dailyscope.DI.DaggerAppComponent
 import com.codeleg.dailyscope.database.local.NewsDB
 import com.codeleg.dailyscope.database.network.RetrofitInstance
 import com.codeleg.dailyscope.database.preference.settingsDataStore
@@ -18,15 +19,15 @@ class DailyScope : Application() {
     override fun onCreate() {
         super.onCreate()
         NotificationChannel.create(this)
-        val newsDao = NewsDB.getDatabase(this).newsDao()
 
-        settingsRepository = SettingsRepository(settingsDataStore)
 
-        newsRepository = NewsRepository(
-            RetrofitInstance.newsApi,
-            newsDao,
-            settingsRepository
-        )
-        BackgroundSyncManager(this , settingsRepository).start()
+        val appComponent = DaggerAppComponent.builder()
+            .application(this)
+            .build()
+
+        settingsRepository = appComponent.getSettingsRepository()
+        newsRepository = appComponent.getNewsRepository()
+
+        BackgroundSyncManager(this, settingsRepository).start()
     }
 }

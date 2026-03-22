@@ -37,8 +37,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private  var clearCachePref : Preference? = null
     private  var deleteNewsPref : Preference? = null
     private val mainVM: MainViewModel by activityViewModels {
-        val newsRepo = (requireActivity().application as DailyScope).newsRepository
-        MainViewModelFactory(newsRepo , settingsRepo)
+        MainViewModelFactory((requireActivity().application as DailyScope).newsRepository , settingsRepo)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
