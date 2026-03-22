@@ -12,7 +12,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.codeleg.dailyscope.R
 import com.codeleg.dailyscope.database.preference.SettingsDataStore
-import com.codeleg.dailyscope.database.preference.settingsDataStore
 import androidx.core.net.toUri
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -27,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import kotlin.getValue
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -41,7 +39,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val dataStore = SettingsDataStore(requireContext().settingsDataStore)
+        val dataStore = SettingsDataStore(settingsRepo.dataStore)
         preferenceManager.preferenceDataStore = dataStore
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) findPreference<Preference>("material_you_enable")?.isVisible = true

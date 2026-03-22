@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 import java.io.File
 import javax.inject.Inject
 
-class SettingsRepository @Inject constructor(private val dataStore: DataStore<Preferences>) {
+class SettingsRepository @Inject constructor(val dataStore: DataStore<Preferences>) {
     private val HEADLINES_ONLY = booleanPreferencesKey("headlines_only")
     private val AUTO_OPEN_SEARCH = booleanPreferencesKey("auto_open_search")
     private val DARK_MODE = booleanPreferencesKey("dark_mode")
