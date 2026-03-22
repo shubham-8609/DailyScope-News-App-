@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("org.jetbrains.kotlin.kapt")
     id("kotlin-parcelize")
-    id("androidx.navigation.safeargs.kotlin") version "2.7.7" apply true
+    id("androidx.navigation.safeargs.kotlin") version "2.7.7"
+    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
 }
 
 android {
@@ -44,6 +45,10 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
 
     /* -------------------- Core -------------------- */
@@ -69,7 +74,7 @@ dependencies {
 
     /* -------------------- Glide -------------------- */
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    ksp("com.github.bumptech.glide:ksp:4.16.0") // ✅ FIXED
 
     /* -------------------- Navigation -------------------- */
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -88,11 +93,15 @@ dependencies {
     /* -------------------- Room -------------------- */
     implementation("androidx.room:room-runtime:2.8.4")
     implementation("androidx.room:room-ktx:2.8.4")
-    kapt("androidx.room:room-compiler:2.8.4")
+    ksp("androidx.room:room-compiler:2.8.4") // ✅ FIXED
+
+    /*------------------ Dagger 2 -------------------- */
+    implementation("com.google.dagger:dagger:2.51")
+    ksp("com.google.dagger:dagger-compiler:2.51") // ✅ FIXED
 
     /* -------------------- Paging 3 -------------------- */
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
-    implementation("androidx.room:room-paging:2.6.1")
+    implementation("androidx.room:room-paging:2.8.4")
 
     /* -------------------- UI Components -------------------- */
     implementation("androidx.viewpager2:viewpager2:1.1.0")
