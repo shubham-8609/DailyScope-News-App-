@@ -21,14 +21,13 @@ import kotlinx.coroutines.withContext
 object NotificationHelper {
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    suspend  fun showBreakingNews(context: Context, title: String, content:String, imageUrl:String , article: Article){
+    suspend  fun showBreakingNews(context: Context, title: String, content:String, imageUrl:String? , article: Article){
 
         val bitmap = withContext(Dispatchers.IO){
             try{
                 Glide.with(context)
                     .asBitmap()
-                    .load(imageUrl)
-                    .error(R.drawable.image_unavailable)
+                    .load(imageUrl ?: R.drawable.image_unavailable)
                     .override(600, 400)
                     .submit()
                     .get()

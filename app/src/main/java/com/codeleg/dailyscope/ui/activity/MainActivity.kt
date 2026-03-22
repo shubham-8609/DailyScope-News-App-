@@ -67,26 +67,31 @@ class MainActivity : AppCompatActivity() {
             binding.toolbar.setupWithNavController(navControler, appBarConfiguration)
         } else Toast.makeText(this, "Navigation controller not found", Toast.LENGTH_SHORT).show()
         navControler?.addOnDestinationChangedListener { _, destination, _ ->
+            with(binding) {
+                bottomNav.visibility = android.view.View.VISIBLE
             when (destination.id) {
-                R.id.homeFragment -> {
-                    binding.toolbar.title = "Home"
-                    binding.toolbar.subtitle = "Latest news and updates"
+                    R.id.homeFragment -> {
+                    toolbar.title = "Home"
+                    toolbar.subtitle = "Latest news and updates"
                 }
-                R.id.searchFragment -> {
-                    binding.toolbar.title = "Search News"
-                    binding.toolbar.subtitle = "Find news you care about"
+                    R.id.searchFragment -> {
+                    toolbar.title = "Search News"
+                    toolbar.subtitle = "Find news you care about"
                 }
-                R.id.bookmarkFragment ->  {
-                    binding.toolbar.title = "Bookmark"
-                    binding.toolbar.subtitle = "Your saved articles"
+                    R.id.bookmarkFragment ->  {
+                    toolbar.title = "Bookmark"
+                    toolbar.subtitle = "Your saved articles"
                 }
-                R.id.articleFragment -> {
-                    binding.toolbar.title = "Article"
-                    binding.toolbar.subtitle = "Read the full article"
+                    R.id.articleFragment -> {
+                    toolbar.title = "Article"
+                    toolbar.subtitle = "Read the full article"
+                    bottomNav.visibility = android.view.View.GONE
                 }
-                R.id.settingsFragment ->  {
-                    binding.toolbar.title = "Settings"
-                    binding.toolbar.subtitle = "Customize your experience"
+                    R.id.settingsFragment ->  {
+                    toolbar.title = "Settings"
+                    toolbar.subtitle = "Customize your experience"
+                }
+
                 }
             }
         }

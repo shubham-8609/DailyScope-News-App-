@@ -53,7 +53,7 @@ class BackgroundSyncManager(
 
     fun startBreakingNewsWorker() {
         val request = PeriodicWorkRequestBuilder<BreakingNewsWorker>(
-            16, TimeUnit.MINUTES
+            3, TimeUnit.HOURS
         ).build()
 
         workManager.enqueueUniquePeriodicWork(

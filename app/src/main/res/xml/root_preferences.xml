@@ -1,7 +1,8 @@
  <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+<!--
 
-    <!-- ================= NEWS CONTENT ================= -->
+    &lt;!&ndash; ================= NEWS CONTENT ================= &ndash;&gt;
 
     <PreferenceCategory
         app:title="News Content"
@@ -34,6 +35,7 @@
 
     </PreferenceCategory>
 
+-->
 
     <!-- ================= APP BEHAVIOR  ================= -->
 
@@ -53,6 +55,7 @@
             app:title="Auto Speak"
             app:summary="Automatically read articles aloud when opened ⚠️ Unstable"
             app:icon="@drawable/icon_speak"
+            app:enabled="false"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

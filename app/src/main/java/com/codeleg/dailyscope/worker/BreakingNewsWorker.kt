@@ -35,7 +35,7 @@ class BreakingNewsWorker(private val context: Context, workerParams: WorkerParam
                     Log.d("codeleg", "Article title: ${article.title} -- BreakingNewsWorker")
                     NotificationHelper.showBreakingNews(
                         context,
-                        "Breaking News: ${article.title}",
+                        "Latest news : ${article.title}",
                         "Click to read more!",
                         article.image ?: "",
                         article
