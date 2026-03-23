@@ -123,6 +123,8 @@ class NewsRepository(
 
     suspend fun updateArticles(article: ArticleEntity) = newsDao.updateArticles(article)
 
+    suspend fun deleteOldArticles(cutoffDate: String) = newsDao.deleteOlderThan(cutoffDate)
+
     suspend fun setBookmarkState(article: Article) = withContext(Dispatchers.IO) {
         newsDao.insertArticles(listOf(article.toEntity()))
     }

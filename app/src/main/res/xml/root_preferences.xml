@@ -139,6 +139,13 @@
         app:title="Storage"
         app:iconSpaceReserved="false">
 
+        <SwitchPreferenceCompat
+            app:key="auto_cleanup"
+            app:title="Auto Cleanup Old Articles"
+            app:summary="Automatically remove articles older than a few days"
+            app:icon="@drawable/ic_delete"
+            app:iconSpaceReserved="false" />
+
         <Preference
             app:key="clear_cache"
             app:title="Clear Cache"

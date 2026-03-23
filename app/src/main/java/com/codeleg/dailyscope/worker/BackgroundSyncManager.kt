@@ -38,6 +38,14 @@ class BackgroundSyncManager(
                     handleBreakingNewsSync(enabled)
                 }
         }
+        CoroutineScope(Dispatchers.IO).launch {
+            settingsRepo.autoCleanupFlow
+                .distinctUntilChanged()
+                .collect { enabled ->
+                    Log.d("codeleg", "Collected autoCleanupFlow value: $enabled -- BackgroundSyncManager")
+                    handleAutoCleanup(enabled)
+                }
+        }
     }
 
     private fun handleBackgroundSync(enabled: Boolean) {
@@ -72,6 +80,23 @@ class BackgroundSyncManager(
         } else {
             workManager.cancelUniqueWork("breaking_news_sync")
             Log.d("codeleg", "Cancelled BreakingNewsWorker because breaking news alerts disabled. -- BackgroundSyncManager")
+        }
+    }
+
+    private fun handleAutoCleanup(enabled: Boolean) {
+        if (enabled) {
+            val request = PeriodicWorkRequestBuilder<CleanupOldArticlesWorker>(
+                3, TimeUnit.DAYS
+            ).build()
+            workManager.enqueueUniquePeriodicWork(
+                "cleanup_old_articles",
+                ExistingPeriodicWorkPolicy.KEEP,
+                request
+            )
+            Log.d("codeleg", "Enqueued CleanupOldArticlesWorker with auto cleanup enabled. -- BackgroundSyncManager")
+        } else {
+            workManager.cancelUniqueWork("cleanup_old_articles")
+            Log.d("codeleg", "Cancelled CleanupOldArticlesWorker because auto cleanup disabled. -- BackgroundSyncManager")
         }
     }
 }

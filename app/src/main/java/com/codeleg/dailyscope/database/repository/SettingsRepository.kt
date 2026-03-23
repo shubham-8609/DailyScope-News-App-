@@ -25,6 +25,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     private val FETCHED_NEWS_NOTIFICATION = booleanPreferencesKey("fetched_news_notification")
     private val BREAKING_NEWS_NOTIFICATION = booleanPreferencesKey("breaking_news_notification")
     private val BACKGROUND_SYNC = booleanPreferencesKey("background_fetch")
+    private val AUTO_CLEANUP = booleanPreferencesKey("auto_cleanup")
     private val IS_GOOD_NEWS = booleanPreferencesKey("is_good_news")
     val headlinesOnlyFlow: Flow<Boolean> = dataStore.data.map { it[HEADLINES_ONLY] ?: false }
     val autoOpenSearch: Flow<Boolean> = dataStore.data.map { it[AUTO_OPEN_SEARCH] ?: false }
@@ -36,6 +37,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     val fetchedNewsNotificationFlow: Flow<Boolean> = dataStore.data.map { it[FETCHED_NEWS_NOTIFICATION] ?: false }
     val breakingNewsNotificationFlow: Flow<Boolean> = dataStore.data.map { it[BREAKING_NEWS_NOTIFICATION] ?: true }
     val backgroundSyncFlow : Flow<Boolean> = dataStore.data.map{ it[BACKGROUND_SYNC] ?: false }
+    val autoCleanupFlow: Flow<Boolean> = dataStore.data.map { it[AUTO_CLEANUP] ?: false }
 //    val isGoodNewsFlow : Flow<Boolean> = dataStore.data.map { it[IS_GOOD_NEWS] ?: false }
 
     suspend fun isGoodNews(): Boolean {
@@ -58,6 +60,12 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
     suspend fun setBreakingNewsNotification(enabled: Boolean) {
         dataStore.edit { prefs ->
             prefs[BREAKING_NEWS_NOTIFICATION] = enabled
+        }
+    }
+
+    suspend fun setAutoCleanup(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[AUTO_CLEANUP] = enabled
         }
     }
 

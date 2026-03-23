@@ -68,6 +68,9 @@ ORDER BY publishDate DESC
     @Query("SELECT * FROM articles WHERE isNotified = 1 ORDER BY publishDate DESC")
     suspend fun getNotifiedArticles(): List<ArticleEntity>
 
+    @Query("DELETE FROM articles WHERE substr(publishDate, 1, 10) < :cutoffDate")
+    suspend fun deleteOlderThan(cutoffDate: String): Int
+
     @Update
     suspend fun updateArticles(article : ArticleEntity)
 
