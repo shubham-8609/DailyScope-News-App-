@@ -78,10 +78,9 @@ class HomeFragment : Fragment() {
 
                     if (isListEmpty) {
                         binding.rvNews.visibility = View.GONE
-                        binding.lottieNoData.visibility = View.VISIBLE
-                        binding.lottieNoData.playAnimation()
+                        binding.emptyStateLayout.visibility = View.VISIBLE
                     } else {
-                        binding.lottieNoData.visibility = View.GONE
+                        binding.emptyStateLayout.visibility = View.GONE
                         binding.rvNews.visibility = View.VISIBLE
                     }
                 }
@@ -89,7 +88,9 @@ class HomeFragment : Fragment() {
         }
         binding.swipeRefresh.setOnRefreshListener {
             refreshNews()
-
+        }
+        binding.btnRefresh.setOnClickListener {
+            refreshNews()
         }
         requireActivity().addMenuProvider(object: MenuProvider{
             override fun onCreateMenu(

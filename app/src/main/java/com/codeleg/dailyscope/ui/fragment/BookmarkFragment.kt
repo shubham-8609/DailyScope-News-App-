@@ -72,7 +72,7 @@ class BookmarkFragment : Fragment() {
                 if(articles.isEmpty()){
                     rvBookmarked.visibility = View.GONE
                 } else {
-                    binding.noBookmarks.visibility = View.GONE
+                    binding.emptyBookmarkLayout.visibility = View.GONE
                     rvBookmarked.visibility = View.VISIBLE
                 }
             }
