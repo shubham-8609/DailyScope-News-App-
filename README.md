@@ -52,20 +52,28 @@ graph TD
 - Bookmarks persist across refreshes; search results merge bookmark state from Room.
 - If you migrate Room schema during development, uninstall the app or rely on destructive migrations.
 
-
 ## Screenshots
 
-| Screen | Preview |
-|--------|---------|
-| Home feed refreshed | ![Home feed](screenshots/home_feed.jpg) |
-| Empty home on startup | ![Empty home](screenshots/empty_home.jpg) |
-| Filters bottom sheet | ![Filters UI](screenshots/filters_ui.jpg) |
-| Filters applied state | ![Filters applied](screenshots/filters_applied.jpg) |
-| Search UI active | ![Search UI](screenshots/search_ui.jpg) |
-| Search results list | ![Search results](screenshots/search_results.jpg) |
-| Bookmarks (empty) | ![Bookmarks empty](screenshots/bookmarks_empty.jpg) |
-| Bookmarks list | ![Bookmarks list](screenshots/bookmarks_list.jpg) |
-| Article detail | ![Article detail](screenshots/article_detail.jpg) |
-| Settings overview | ![Settings](screenshots/settings.jpg) |
-| Notification access prompt | ![Notification access](screenshots/notification_access.jpg) |
-| More settings preferences | ![More settings](screenshots/more_settings.jpg) |****
+<p align="center">
+  <img src="screenshots/home_feed.jpg" width="180"/>
+  <img src="screenshots/empty_home.jpg" width="180"/>
+  <img src="screenshots/filters_ui.jpg" width="180"/>
+</p>
+
+<p align="center">
+  <img src="screenshots/filters_applied.jpg" width="180"/>
+  <img src="screenshots/search_ui.jpg" width="180"/>
+  <img src="screenshots/search_results.jpg" width="180"/>
+</p>
+
+<p align="center">
+  <img src="screenshots/bookmarks_empty.jpg" width="180"/>
+  <img src="screenshots/bookmarks_list.jpg" width="180"/>
+  <img src="screenshots/article_detail.jpg" width="180"/>
+</p>
+
+<p align="center">
+  <img src="screenshots/settings.jpg" width="180"/>
+  <img src="screenshots/notification_access.jpg" width="180"/>
+  <img src="screenshots/more_settings.jpg" width="180"/>
+</p>
