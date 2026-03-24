@@ -17,67 +17,74 @@
         android:orientation="vertical"
         android:gravity="center"
         android:padding="24dp"
-        android:background="?attr/colorSurfaceContainerLow"
+        android:background="?attr/colorSurface"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/rvSearchResults"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.7">
 
-        <TextView
-            android:id="@+id/suggestionTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Try searching for"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="16dp"/>
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/searchSuggestions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:chipSpacingHorizontal="8dp"
-            app:chipSpacingVertical="8dp"
-            app:singleLine="false">
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Assist"
+            <TextView
+                android:id="@+id/suggestionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AI news"/>
+                android:layout_marginBottom="16dp"
+                android:text="Try searching for"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Assist"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/searchSuggestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tech trends"/>
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="8dp"
+                app:singleLine="false">
 
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Startup funding"/>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AI news" />
 
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Global economy"/>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tech trends" />
 
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Space discoveries"/>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Startup funding" />
 
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Climate change"/>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Global economy" />
 
-        </com.google.android.material.chip.ChipGroup>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Space discoveries" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Assist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Climate change" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -88,6 +95,7 @@
         android:layout_height="0dp"
         android:padding="8dp"
         android:clipToPadding="false"
+        android:visibility="gone"
         android:background="?attr/colorSurface"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/suggestionContainer"
@@ -105,9 +113,9 @@
         android:text="@string/search_empty_state"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?attr/colorOnSurfaceVariant"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/suggestionContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

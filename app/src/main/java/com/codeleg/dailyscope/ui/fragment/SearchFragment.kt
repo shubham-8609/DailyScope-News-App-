@@ -83,7 +83,6 @@ class SearchFragment : Fragment() {
                 }
 
                 searchViewModel.submitQuery(query)
-                binding.suggestionContainer.visibility = View.GONE
             }
         }
     }
@@ -119,7 +118,6 @@ class SearchFragment : Fragment() {
                             if (term.isNotBlank()) {
                                 searchViewModel.submitQuery(term)
                                 clearFocus()
-                                binding.suggestionContainer.visibility = View.GONE
                             }
 
                             return true
@@ -132,7 +130,6 @@ class SearchFragment : Fragment() {
 
                     setOnCloseListener {
                         searchViewModel.clearQuery()
-                        binding.suggestionContainer.visibility = View.GONE
                         true
                     }
 
@@ -172,14 +169,36 @@ class SearchFragment : Fragment() {
     }
     private fun observeLoadState() {
         searchAdapter.addLoadStateListener { loadState ->
+
             val query = searchViewModel.query.value
-            val isEmptyResult = loadState.refresh is LoadState.NotLoading && searchAdapter.itemCount == 0 && query.isNotBlank()
-            val shouldShowEmpty = query.isBlank() || isEmptyResult
-            binding.emptyState.isVisible = shouldShowEmpty
-            binding.emptyState.text = if (query.isBlank()) {
-                getString(R.string.search_empty_state)
-            } else {
-                getString(R.string.search_no_results)
+            val isQueryEmpty = query.isBlank()
+
+            val isListEmpty =
+                loadState.refresh is LoadState.NotLoading &&
+                        searchAdapter.itemCount == 0
+
+            when {
+                // ✅ Default state (no query)
+                isQueryEmpty -> {
+                    binding.suggestionContainer.isVisible = true
+                    binding.rvSearchResults.isVisible = false
+                    binding.emptyState.isVisible = false
+                }
+
+                // ❌ No results found
+                isListEmpty -> {
+                    binding.suggestionContainer.isVisible = false
+                    binding.rvSearchResults.isVisible = false
+                    binding.emptyState.isVisible = true
+                    binding.emptyState.text = getString(R.string.search_no_results)
+                }
+
+                // ✅ Results available
+                else -> {
+                    binding.suggestionContainer.isVisible = false
+                    binding.rvSearchResults.isVisible = true
+                    binding.emptyState.isVisible = false
+                }
             }
         }
     }
